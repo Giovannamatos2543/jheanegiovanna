@@ -56,12 +56,14 @@ const NAV = [
 ];
 
 function useCountdown(target: Date) {
-  const [now, setNow] = useState(() => new Date());
+  const [now, setNow] = useState<Date | null>(null);
   useEffect(() => {
+    setNow(new Date());
     const i = setInterval(() => setNow(new Date()), 1000);
     return () => clearInterval(i);
   }, []);
-  const diff = Math.max(0, target.getTime() - now.getTime());
+  const current = now ?? target;
+  const diff = Math.max(0, target.getTime() - current.getTime());
   const d = Math.floor(diff / 86400000);
   const h = Math.floor((diff / 3600000) % 24);
   const m = Math.floor((diff / 60000) % 60);
@@ -383,15 +385,15 @@ function Cerimonia() {
     <Section id="cerimonia" eyebrow="06 · Março · 2027" title="A Cerimônia">
       <motion.div
         {...fadeUp}
-        className="relative overflow-hidden mb-12 shadow-[0_30px_80px_-40px_rgba(0,0,0,0.35)] rounded-sm max-w-5xl mx-auto"
+        className="relative overflow-hidden mb-12 shadow-[0_30px_80px_-40px_rgba(0,0,0,0.35)] rounded-sm max-w-5xl mx-auto bg-black/5"
       >
         <img
           src={ceremonyImg}
           alt="Igreja Santa Cecília — Cruzeiro/SP"
           loading="lazy"
-          className="w-full aspect-[16/10] md:aspect-[21/9] object-cover object-center"
+          className="w-full h-auto object-contain object-center"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-black/10 pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-black/10 pointer-events-none" />
         <div className="absolute inset-0 ring-1 ring-inset ring-white/20 pointer-events-none" />
       </motion.div>
       <div className="max-w-2xl mx-auto">
