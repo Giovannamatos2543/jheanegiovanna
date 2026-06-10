@@ -900,7 +900,7 @@ function Footer() {
         <Mail size={12} />
         <span>noivos@jheanegiovanna.com</span>
       </a>
-      <p className="mt-4">© 2026 — Feito com amor</p>
+      <p className="mt-4">© 2027 — Feito com amor</p>
     </footer>
   );
 }
