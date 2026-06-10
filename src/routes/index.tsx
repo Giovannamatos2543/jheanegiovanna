@@ -333,39 +333,83 @@ function Galeria() {
   );
 }
 
+function EventCard({
+  icon: Icon,
+  eyebrow,
+  title,
+  time,
+  place,
+  address,
+  mapsUrl,
+  note,
+}: {
+  icon: typeof Calendar;
+  eyebrow: string;
+  title: string;
+  time: string;
+  place: string;
+  address: string;
+  mapsUrl: string;
+  note: string;
+}) {
+  return (
+    <motion.div
+      {...fadeUp}
+      className="border border-border bg-card p-10 md:p-14 text-center shadow-[0_20px_60px_-40px_rgba(0,0,0,0.3)]"
+    >
+      <Icon className="mx-auto text-fuchsia" size={22} />
+      <p className="mt-4 text-[10px] uppercase tracking-[0.4em] text-foreground/50">{eyebrow}</p>
+      <h3 className="font-serif-display text-3xl mt-3">{title}</h3>
+      <p className="font-script text-4xl text-fuchsia mt-4">{time}</p>
+      <div className="mx-auto my-6 h-px w-16 bg-gold/60" />
+      <p className="uppercase tracking-[0.3em] text-xs text-foreground/70">{place}</p>
+      <p className="mt-3 text-sm text-foreground/70 leading-relaxed whitespace-pre-line">{address}</p>
+      <p className="mt-5 text-xs italic text-foreground/60">{note}</p>
+      <a
+        href={mapsUrl}
+        target="_blank"
+        rel="noreferrer"
+        className="inline-block mt-8 border border-foreground/80 px-8 py-3 text-[11px] uppercase tracking-[0.3em] hover:bg-foreground hover:text-background transition-colors"
+      >
+        Como chegar
+      </a>
+    </motion.div>
+  );
+}
+
 function Cerimonia() {
   return (
-    <Section id="cerimonia" eyebrow="Save the date" title="Cerimônia & Recepção">
-      <div className="grid md:grid-cols-2 gap-10">
-        {[
-          {
-            icon: Calendar,
-            title: "Cerimônia",
-            time: "17h00",
-            place: "Capela Santa Clara",
-            note: "Traje passeio completo. Recepção logo após a cerimônia.",
-          },
-          {
-            icon: Heart,
-            title: "Recepção",
-            time: "19h00",
-            place: "Villa Bianca",
-            note: "Jantar, brindes e muito amor. Confirme presença até 14.02.2026.",
-          },
-        ].map((c) => (
-          <motion.div
-            key={c.title}
-            {...fadeUp}
-            className="border border-border bg-card p-10 md:p-14 text-center shadow-[0_20px_60px_-40px_rgba(0,0,0,0.3)]"
-          >
-            <c.icon className="mx-auto text-fuchsia" size={22} />
-            <h3 className="font-serif-display text-3xl mt-6">{c.title}</h3>
-            <p className="font-script text-4xl text-fuchsia mt-4">{c.time}</p>
-            <p className="mt-4 uppercase tracking-[0.3em] text-xs text-foreground/70">{c.place}</p>
-            <div className="mx-auto my-6 h-px w-16 bg-gold/60" />
-            <p className="text-sm text-foreground/70 leading-relaxed">{c.note}</p>
-          </motion.div>
-        ))}
+    <Section id="cerimonia" eyebrow="06 · Março · 2027" title="A Cerimônia">
+      <div className="max-w-2xl mx-auto">
+        <EventCard
+          icon={Church}
+          eyebrow="Celebração religiosa"
+          title="Igreja Santa Cecília"
+          time="19h00"
+          place="Igreja Santa Cecília"
+          address={"Av. Jorge Tibiriçá, 364 — Centro\nCruzeiro · SP · 12701-020"}
+          mapsUrl="https://www.google.com/maps/search/?api=1&query=Igreja+Santa+Cec%C3%ADlia+Av.+Jorge+Tibiri%C3%A7%C3%A1+364+Cruzeiro+SP"
+          note="Pedimos a gentileza de chegar 30 minutos antes. Traje: passeio completo."
+        />
+      </div>
+    </Section>
+  );
+}
+
+function Recepcao() {
+  return (
+    <Section id="recepcao" eyebrow="Logo após a cerimônia" title="A Recepção" className="bg-offwhite">
+      <div className="max-w-2xl mx-auto">
+        <EventCard
+          icon={Wine}
+          eyebrow="Jantar & celebração"
+          title="Saruê"
+          time="21h00"
+          place="Saruê Eventos"
+          address={"R. Ver. Aurélio Garcês Novaes, 81 — Itagaçaba\nCruzeiro · SP · 12730-130"}
+          mapsUrl="https://www.google.com/maps/search/?api=1&query=Saru%C3%AA+R.+Ver.+Aur%C3%A9lio+Gar%C3%A7%C3%AAs+Novaes+81+Cruzeiro+SP"
+          note="Jantar, brindes, dança e muito amor. Confirme sua presença até 06.02.2027."
+        />
       </div>
     </Section>
   );
