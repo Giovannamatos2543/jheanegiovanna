@@ -461,33 +461,230 @@ function Local() {
   );
 }
 
+type GiftCategory = {
+  id: string;
+  label: string;
+  icon: typeof Gift;
+};
+
+const GIFT_CATEGORIES: GiftCategory[] = [
+  { id: "todos", label: "Todos", icon: Sparkles },
+  { id: "cozinha", label: "Cozinha", icon: Utensils },
+  { id: "lua-de-mel", label: "Lua de mel", icon: Plane },
+  { id: "casa", label: "Casa nova", icon: HomeIcon },
+  { id: "eletro", label: "Eletrodomésticos", icon: Sparkles },
+  { id: "deco", label: "Decoração", icon: Sofa },
+  { id: "experiencias", label: "Experiências", icon: Camera },
+  { id: "cotas", label: "Cotas simbólicas", icon: Coins },
+  { id: "pix", label: "PIX & Dinheiro", icon: Wallet },
+];
+
+type GiftItem = {
+  name: string;
+  desc: string;
+  value: string;
+  category: string;
+  image: string;
+  cta?: string;
+};
+
+const GIFTS: GiftItem[] = [
+  {
+    name: "Jogo de panelas",
+    desc: "Para os jantares românticos do nosso lar",
+    value: "R$ 480",
+    category: "cozinha",
+    image: "https://images.unsplash.com/photo-1584990347449-a2d4c2c9a3a6?w=900&q=80&auto=format&fit=crop",
+  },
+  {
+    name: "Faqueiro completo",
+    desc: "Para receber os queridos à mesa",
+    value: "R$ 320",
+    category: "cozinha",
+    image: "https://images.unsplash.com/photo-1611078489935-0cb964de46d6?w=900&q=80&auto=format&fit=crop",
+  },
+  {
+    name: "Cafeteira italiana",
+    desc: "Para as manhãs lentas a dois",
+    value: "R$ 220",
+    category: "cozinha",
+    image: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=900&q=80&auto=format&fit=crop",
+  },
+  {
+    name: "Passagens aéreas",
+    desc: "Um trecho da nossa lua de mel",
+    value: "R$ 1.200",
+    category: "lua-de-mel",
+    image: "https://images.unsplash.com/photo-1488085061387-422e29b40080?w=900&q=80&auto=format&fit=crop",
+  },
+  {
+    name: "Diária romântica",
+    desc: "Uma noite especial em hotel boutique",
+    value: "R$ 850",
+    category: "lua-de-mel",
+    image: "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=900&q=80&auto=format&fit=crop",
+  },
+  {
+    name: "Jantar à beira-mar",
+    desc: "Um brinde ao nosso amor",
+    value: "R$ 400",
+    category: "lua-de-mel",
+    image: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=900&q=80&auto=format&fit=crop",
+  },
+  {
+    name: "Jogo de cama king",
+    desc: "Para as noites mais aconchegantes",
+    value: "R$ 380",
+    category: "casa",
+    image: "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=900&q=80&auto=format&fit=crop",
+  },
+  {
+    name: "Jogo de toalhas",
+    desc: "Conforto para o dia a dia",
+    value: "R$ 250",
+    category: "casa",
+    image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=900&q=80&auto=format&fit=crop",
+  },
+  {
+    name: "Air fryer",
+    desc: "Praticidade para o nosso dia a dia",
+    value: "R$ 650",
+    category: "eletro",
+    image: "https://images.unsplash.com/photo-1574269910231-bc508bcb6dbf?w=900&q=80&auto=format&fit=crop",
+  },
+  {
+    name: "Liquidificador premium",
+    desc: "Para sucos, sopas e mais",
+    value: "R$ 480",
+    category: "eletro",
+    image: "https://images.unsplash.com/photo-1570222094114-d054a817e56b?w=900&q=80&auto=format&fit=crop",
+  },
+  {
+    name: "Vasos decorativos",
+    desc: "Para dar vida aos cantinhos da casa",
+    value: "R$ 180",
+    category: "deco",
+    image: "https://images.unsplash.com/photo-1602874801006-e26c4c5b5a4a?w=900&q=80&auto=format&fit=crop",
+  },
+  {
+    name: "Quadros para sala",
+    desc: "Memórias na parede",
+    value: "R$ 300",
+    category: "deco",
+    image: "https://images.unsplash.com/photo-1513519245088-0e12902e5a38?w=900&q=80&auto=format&fit=crop",
+  },
+  {
+    name: "Ensaio fotográfico",
+    desc: "Para eternizar nossa lua de mel",
+    value: "R$ 700",
+    category: "experiencias",
+    image: "https://images.unsplash.com/photo-1519741497674-611481863552?w=900&q=80&auto=format&fit=crop",
+  },
+  {
+    name: "Passeio de barco",
+    desc: "Um dia inesquecível a dois",
+    value: "R$ 600",
+    category: "experiencias",
+    image: "https://images.unsplash.com/photo-1502920917128-1aa500764cbd?w=900&q=80&auto=format&fit=crop",
+  },
+  {
+    name: "Cota Champagne",
+    desc: "Um brinde simbólico ao nosso amor",
+    value: "R$ 80",
+    category: "cotas",
+    image: "https://images.unsplash.com/photo-1543007630-9710e4a00a20?w=900&q=80&auto=format&fit=crop",
+  },
+  {
+    name: "Cota Pétalas",
+    desc: "Para enfeitar o nosso altar",
+    value: "R$ 50",
+    category: "cotas",
+    image: "https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=900&q=80&auto=format&fit=crop",
+  },
+  {
+    name: "Cota Velas",
+    desc: "Luz para o nosso novo lar",
+    value: "R$ 30",
+    category: "cotas",
+    image: "https://images.unsplash.com/photo-1602874801006-e26c4c5b5a4a?w=900&q=80&auto=format&fit=crop",
+  },
+  {
+    name: "PIX livre",
+    desc: "Contribua com o valor que desejar",
+    value: "Valor livre",
+    category: "pix",
+    image: "https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=900&q=80&auto=format&fit=crop",
+    cta: "Copiar chave PIX",
+  },
+  {
+    name: "Envelope dourado",
+    desc: "Presente em dinheiro com elegância",
+    value: "R$ 200",
+    category: "pix",
+    image: "https://images.unsplash.com/photo-1556742400-b5b7c5121f7a?w=900&q=80&auto=format&fit=crop",
+  },
+];
+
 function Presentes() {
-  const gifts = [
-    { name: "Lua de Mel", desc: "Contribua com nossa viagem dos sonhos", value: "Valor livre" },
-    { name: "Nosso Lar", desc: "Itens para começarmos a nossa casa", value: "A partir de R$ 150" },
-    { name: "Cota Especial", desc: "Um mimo para o grande dia", value: "R$ 300" },
-  ];
+  const [active, setActive] = useState("todos");
+  const filtered = useMemo(
+    () => (active === "todos" ? GIFTS : GIFTS.filter((g) => g.category === active)),
+    [active],
+  );
   return (
     <Section id="presentes" eyebrow="Com carinho" title="Lista de Presentes" className="bg-offwhite">
-      <div className="grid md:grid-cols-3 gap-6">
-        {gifts.map((g, i) => (
-          <motion.div
-            key={g.name}
+      <motion.div {...fadeUp} className="flex flex-wrap justify-center gap-2 md:gap-3 mb-14">
+        {GIFT_CATEGORIES.map((c) => {
+          const Icon = c.icon;
+          const on = active === c.id;
+          return (
+            <button
+              key={c.id}
+              onClick={() => setActive(c.id)}
+              className={`group inline-flex items-center gap-2 border px-4 md:px-5 py-2.5 text-[10px] uppercase tracking-[0.25em] transition-all ${
+                on
+                  ? "border-foreground bg-foreground text-background"
+                  : "border-border bg-card text-foreground/70 hover:border-foreground/60"
+              }`}
+            >
+              <Icon size={12} className={on ? "text-gold" : "text-fuchsia"} />
+              {c.label}
+            </button>
+          );
+        })}
+      </motion.div>
+
+      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+        {filtered.map((g, i) => (
+          <motion.article
+            key={g.name + i}
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: i * 0.1 }}
-            className="group bg-card p-10 text-center border border-border hover:border-fuchsia/50 transition-colors"
+            viewport={{ once: true, margin: "-50px" }}
+            transition={{ duration: 0.7, delay: (i % 6) * 0.06, ease: [0.22, 1, 0.36, 1] }}
+            className="group bg-card border border-border overflow-hidden flex flex-col hover:border-fuchsia/40 transition-colors shadow-[0_20px_60px_-50px_rgba(0,0,0,0.35)]"
           >
-            <Gift size={20} className="mx-auto text-gold group-hover:text-fuchsia transition-colors" />
-            <h3 className="font-serif-display text-2xl mt-6">{g.name}</h3>
-            <div className="mx-auto my-5 h-px w-12 bg-gold/60" />
-            <p className="text-sm text-foreground/70 leading-relaxed">{g.desc}</p>
-            <p className="mt-5 text-xs uppercase tracking-[0.25em] text-foreground/60">{g.value}</p>
-            <button className="mt-8 w-full border border-foreground/80 py-3 text-[11px] uppercase tracking-[0.3em] hover:bg-foreground hover:text-background transition-colors">
-              Presentear
-            </button>
-          </motion.div>
+            <div className="relative aspect-[4/3] overflow-hidden bg-offwhite">
+              <img
+                src={g.image}
+                alt={g.name}
+                loading="lazy"
+                className="h-full w-full object-cover transition-transform duration-[1400ms] group-hover:scale-105"
+              />
+              <div className="absolute top-3 left-3 bg-background/90 backdrop-blur px-3 py-1 text-[9px] uppercase tracking-[0.25em] text-foreground/70">
+                {GIFT_CATEGORIES.find((c) => c.id === g.category)?.label}
+              </div>
+            </div>
+            <div className="p-7 text-center flex-1 flex flex-col">
+              <h3 className="font-serif-display text-xl">{g.name}</h3>
+              <div className="mx-auto my-4 h-px w-10 bg-gold/60" />
+              <p className="text-sm text-foreground/70 leading-relaxed flex-1">{g.desc}</p>
+              <p className="mt-5 font-serif-display text-2xl text-foreground">{g.value}</p>
+              <button className="mt-6 w-full border border-foreground/80 py-3 text-[10px] uppercase tracking-[0.3em] hover:bg-foreground hover:text-background transition-colors">
+                {g.cta ?? "Presentear"}
+              </button>
+            </div>
+          </motion.article>
         ))}
       </div>
     </Section>
