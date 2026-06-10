@@ -691,74 +691,153 @@ function Presentes() {
   );
 }
 
+type Family = { id: string; name: string; members: string[] };
+
+const FAMILIES: Family[] = [
+  { id: "silva", name: "Família Silva", members: ["Carlos Silva", "Marta Silva", "Pedro Silva", "Ana Silva"] },
+  { id: "oliveira", name: "Família Oliveira", members: ["Roberto Oliveira", "Helena Oliveira", "Lucas Oliveira"] },
+  { id: "santos", name: "Família Santos", members: ["José Santos", "Maria Santos", "Beatriz Santos", "Rafael Santos"] },
+  { id: "almeida", name: "Família Almeida", members: ["Eduardo Almeida", "Camila Almeida"] },
+  { id: "ferreira", name: "Família Ferreira", members: ["Marcelo Ferreira", "Patrícia Ferreira", "Júlia Ferreira"] },
+  { id: "costa", name: "Família Costa", members: ["André Costa", "Renata Costa", "Sofia Costa", "Miguel Costa"] },
+];
+
 function RSVP() {
-  const [sent, setSent] = useState(false);
+  const [step, setStep] = useState<"familia" | "membros" | "sucesso">("familia");
+  const [familyId, setFamilyId] = useState<string | null>(null);
+  const [selected, setSelected] = useState<string[]>([]);
+  const [message, setMessage] = useState("");
+
+  const family = FAMILIES.find((f) => f.id === familyId) ?? null;
+
+  function reset() {
+    setStep("familia");
+    setFamilyId(null);
+    setSelected([]);
+    setMessage("");
+  }
+
   return (
     <Section id="rsvp" eyebrow="Confirme sua presença" title="RSVP">
-      <motion.form
+      <motion.div
         {...fadeUp}
-        onSubmit={(e) => {
-          e.preventDefault();
-          setSent(true);
-        }}
-        className="mx-auto max-w-2xl space-y-8 bg-card border border-border p-10 md:p-14 shadow-[0_30px_80px_-50px_rgba(0,0,0,0.3)]"
+        className="mx-auto max-w-2xl bg-card border border-border p-8 md:p-14 shadow-[0_30px_80px_-50px_rgba(0,0,0,0.3)]"
       >
-        {sent ? (
-          <div className="text-center py-10">
-            <Heart className="mx-auto text-fuchsia" size={28} fill="currentColor" />
-            <p className="font-serif-display text-3xl mt-6">Obrigado!</p>
-            <p className="mt-4 text-foreground/70">Sua presença foi confirmada com carinho.</p>
+        {step === "familia" && (
+          <div>
+            <p className="text-center text-sm text-foreground/70 mb-10 leading-relaxed">
+              Para manter este momento íntimo, selecione abaixo a <em className="font-serif-display not-italic">sua família</em> para acessarmos sua lista privada de convidados.
+            </p>
+            <div className="grid sm:grid-cols-2 gap-3">
+              {FAMILIES.map((f) => (
+                <button
+                  key={f.id}
+                  onClick={() => {
+                    setFamilyId(f.id);
+                    setSelected([]);
+                    setStep("membros");
+                  }}
+                  className="group text-left border border-border bg-background hover:border-fuchsia/60 hover:bg-offwhite transition-all p-5"
+                >
+                  <p className="font-serif-display text-lg">{f.name}</p>
+                  <p className="mt-1 text-[10px] uppercase tracking-[0.25em] text-foreground/50">
+                    {f.members.length} convidado{f.members.length > 1 ? "s" : ""}
+                  </p>
+                </button>
+              ))}
+            </div>
           </div>
-        ) : (
-          <>
+        )}
+
+        {step === "membros" && family && (
+          <div>
+            <button
+              onClick={() => setStep("familia")}
+              className="inline-flex items-center gap-2 text-[10px] uppercase tracking-[0.3em] text-foreground/60 hover:text-foreground transition-colors mb-8"
+            >
+              <ChevronLeft size={12} /> Trocar família
+            </button>
+            <h3 className="font-serif-display text-2xl text-center">{family.name}</h3>
+            <Ornament className="my-6" />
+            <p className="text-center text-sm text-foreground/70 mb-8">
+              Selecione quem irá comparecer:
+            </p>
+            <ul className="space-y-2 mb-8">
+              {family.members.map((m) => {
+                const on = selected.includes(m);
+                return (
+                  <li key={m}>
+                    <label
+                      className={`flex items-center justify-between gap-4 px-5 py-4 border cursor-pointer transition-all ${
+                        on ? "border-foreground bg-offwhite" : "border-border hover:border-foreground/40"
+                      }`}
+                    >
+                      <span className="font-serif-display text-lg">{m}</span>
+                      <span
+                        className={`flex items-center justify-center w-6 h-6 border ${
+                          on ? "border-foreground bg-foreground text-background" : "border-border"
+                        }`}
+                      >
+                        {on && <Check size={14} />}
+                      </span>
+                      <input
+                        type="checkbox"
+                        className="sr-only"
+                        checked={on}
+                        onChange={(e) =>
+                          setSelected((s) => (e.target.checked ? [...s, m] : s.filter((x) => x !== m)))
+                        }
+                      />
+                    </label>
+                  </li>
+                );
+              })}
+            </ul>
             <div>
               <label className="block text-[10px] uppercase tracking-[0.3em] text-foreground/60 mb-3">
-                Seu nome completo
-              </label>
-              <input
-                required
-                type="text"
-                className="w-full border-b border-border bg-transparent py-3 outline-none focus:border-fuchsia transition-colors"
-              />
-            </div>
-            <div>
-              <label className="block text-[10px] uppercase tracking-[0.3em] text-foreground/60 mb-3">
-                E-mail
-              </label>
-              <input
-                required
-                type="email"
-                className="w-full border-b border-border bg-transparent py-3 outline-none focus:border-fuchsia transition-colors"
-              />
-            </div>
-            <div>
-              <label className="block text-[10px] uppercase tracking-[0.3em] text-foreground/60 mb-3">
-                Acompanhantes
-              </label>
-              <select className="w-full border-b border-border bg-transparent py-3 outline-none focus:border-fuchsia transition-colors">
-                <option>Apenas eu</option>
-                <option>+ 1 acompanhante</option>
-                <option>+ 2 acompanhantes</option>
-              </select>
-            </div>
-            <div>
-              <label className="block text-[10px] uppercase tracking-[0.3em] text-foreground/60 mb-3">
-                Recado para os noivos
+                Recado para os noivos (opcional)
               </label>
               <textarea
                 rows={3}
-                className="w-full border-b border-border bg-transparent py-3 outline-none focus:border-fuchsia transition-colors resize-none"
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+                className="w-full border border-border bg-background p-4 outline-none focus:border-fuchsia transition-colors resize-none text-sm"
               />
             </div>
             <button
-              type="submit"
-              className="w-full border border-foreground py-4 text-[11px] uppercase tracking-[0.4em] hover:bg-foreground hover:text-background transition-colors"
+              disabled={selected.length === 0}
+              onClick={() => setStep("sucesso")}
+              className="mt-8 w-full border border-foreground py-4 text-[11px] uppercase tracking-[0.4em] hover:bg-foreground hover:text-background transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
             >
               Confirmar presença
             </button>
-          </>
+          </div>
         )}
-      </motion.form>
+
+        {step === "sucesso" && family && (
+          <div className="text-center py-6">
+            <Heart className="mx-auto text-fuchsia" size={28} fill="currentColor" />
+            <p className="font-serif-display text-3xl md:text-4xl mt-6">Com todo carinho, obrigado!</p>
+            <Ornament className="my-8" />
+            <p className="text-foreground/70 leading-relaxed max-w-md mx-auto">
+              A presença de <span className="font-serif-display italic">{family.name}</span> foi confirmada com {selected.length} convidado{selected.length > 1 ? "s" : ""}. Mal podemos esperar para celebrar esse dia ao seu lado.
+            </p>
+            <ul className="mt-6 inline-flex flex-wrap justify-center gap-2">
+              {selected.map((m) => (
+                <li key={m} className="text-[10px] uppercase tracking-[0.25em] border border-border px-3 py-1.5 bg-offwhite">
+                  {m}
+                </li>
+              ))}
+            </ul>
+            <button
+              onClick={reset}
+              className="mt-10 text-[10px] uppercase tracking-[0.3em] text-foreground/60 hover:text-foreground transition-colors"
+            >
+              Confirmar outra família
+            </button>
+          </div>
+        )}
+      </motion.div>
     </Section>
   );
 }
