@@ -417,12 +417,12 @@ function Recepcao() {
 
 function Local() {
   return (
-    <Section id="local" eyebrow="Onde nos encontrar" title="O Local">
+    <Section id="local" eyebrow="Onde nos encontrar" title="Localização">
       <motion.div {...fadeUp} className="space-y-8">
         <div className="relative overflow-hidden">
           <img
             src={venueImg}
-            alt="Villa Bianca"
+            alt="Saruê — Cruzeiro/SP"
             width={1536}
             height={1024}
             loading="lazy"
@@ -433,13 +433,13 @@ function Local() {
           <div className="space-y-4">
             <p className="flex items-center gap-3 text-foreground/80">
               <MapPin size={18} className="text-fuchsia" />
-              Rua das Acácias, 1500 — Jardim das Flores, SP
+              R. Ver. Aurélio Garcês Novaes, 81 — Itagaçaba, Cruzeiro/SP
             </p>
             <p className="text-sm text-foreground/70 leading-relaxed max-w-md">
-              Um refúgio cercado de jardins e luz natural, escolhido com carinho para receber as pessoas mais importantes das nossas vidas.
+              Um refúgio cercado de jardins e luz natural, escolhido com carinho para receber as pessoas mais importantes das nossas vidas. A apenas alguns minutos da Igreja Santa Cecília.
             </p>
             <a
-              href="https://maps.google.com/?q=Villa+Bianca"
+              href="https://www.google.com/maps/search/?api=1&query=Saru%C3%AA+R.+Ver.+Aur%C3%A9lio+Gar%C3%A7%C3%AAs+Novaes+81+Cruzeiro+SP"
               target="_blank"
               rel="noreferrer"
               className="inline-block mt-4 border border-foreground/80 px-8 py-3 text-[11px] uppercase tracking-[0.3em] hover:bg-foreground hover:text-background transition-colors"
@@ -450,7 +450,7 @@ function Local() {
           <div className="aspect-[4/3] w-full overflow-hidden border border-border">
             <iframe
               title="Mapa do local"
-              src="https://www.google.com/maps?q=-23.5505,-46.6333&z=14&output=embed"
+              src="https://www.google.com/maps?q=Saru%C3%AA+R.+Ver.+Aur%C3%A9lio+Gar%C3%A7%C3%AAs+Novaes+81+Cruzeiro+SP&z=15&output=embed"
               className="h-full w-full grayscale"
               loading="lazy"
             />
