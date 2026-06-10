@@ -193,7 +193,7 @@ function Hero() {
         >
           <Ornament />
           <p className="font-serif-display text-lg md:text-2xl tracking-[0.4em] uppercase">
-            14 · 03 · 2026
+            06 · 03 · 2027
           </p>
         </motion.div>
 
