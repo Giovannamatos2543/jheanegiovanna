@@ -1,7 +1,28 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { motion } from "motion/react";
-import { Heart, MapPin, Music2, Gift, Calendar, Mail, Menu, X } from "lucide-react";
+import {
+  Heart,
+  MapPin,
+  Music2,
+  Gift,
+  Calendar,
+  Mail,
+  Menu,
+  X,
+  Church,
+  Wine,
+  ChevronLeft,
+  Check,
+  Utensils,
+  Plane,
+  Home as HomeIcon,
+  Sparkles,
+  Sofa,
+  Camera,
+  Coins,
+  Wallet,
+} from "lucide-react";
 
 import heroCouple from "@/assets/hero-couple.jpg";
 import gallery1 from "@/assets/gallery-1.jpg";
@@ -13,19 +34,20 @@ import venueImg from "@/assets/venue.jpg";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Jhean & Giovanna · 14.03.2026" },
+      { title: "Jhean & Giovanna · 06.03.2027" },
       { name: "description", content: "Site oficial do casamento de Jhean e Giovanna. Nossa história, lista de presentes, RSVP e mais." },
     ],
   }),
   component: Index,
 });
 
-const WEDDING_DATE = new Date("2026-03-14T17:00:00-03:00");
+const WEDDING_DATE = new Date("2027-03-06T19:00:00-03:00");
 
 const NAV = [
   { id: "historia", label: "História" },
   { id: "galeria", label: "Galeria" },
   { id: "cerimonia", label: "Cerimônia" },
+  { id: "recepcao", label: "Recepção" },
   { id: "local", label: "Local" },
   { id: "presentes", label: "Presentes" },
   { id: "rsvp", label: "RSVP" },
