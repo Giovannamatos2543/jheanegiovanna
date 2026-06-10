@@ -897,7 +897,8 @@ function Footer() {
   return (
     <footer className="bg-foreground text-background/60 border-t border-white/10 py-10 px-6 text-center text-[10px] uppercase tracking-[0.3em]">
       <a href="mailto:noivos@jheanegiovanna.com" className="inline-flex items-center gap-2 hover:text-background">
-        <Mail size={12} /> noivos@jheanegiovanna.com
+        <Mail size={12} />
+        <span>noivos@jheanegiovanna.com</span>
       </a>
       <p className="mt-4">© 2026 — Feito com amor</p>
     </footer>
@@ -913,6 +914,7 @@ function Index() {
         <Historia />
         <Galeria />
         <Cerimonia />
+        <Recepcao />
         <Local />
         <Presentes />
         <RSVP />
