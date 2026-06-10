@@ -1,7 +1,28 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { motion } from "motion/react";
-import { Heart, MapPin, Music2, Gift, Calendar, Mail, Menu, X } from "lucide-react";
+import {
+  Heart,
+  MapPin,
+  Music2,
+  Gift,
+  Calendar,
+  Mail,
+  Menu,
+  X,
+  Church,
+  Wine,
+  ChevronLeft,
+  Check,
+  Utensils,
+  Plane,
+  Home as HomeIcon,
+  Sparkles,
+  Sofa,
+  Camera,
+  Coins,
+  Wallet,
+} from "lucide-react";
 
 import heroCouple from "@/assets/hero-couple.jpg";
 import gallery1 from "@/assets/gallery-1.jpg";
@@ -13,19 +34,20 @@ import venueImg from "@/assets/venue.jpg";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Jhean & Giovanna · 14.03.2026" },
+      { title: "Jhean & Giovanna · 06.03.2027" },
       { name: "description", content: "Site oficial do casamento de Jhean e Giovanna. Nossa história, lista de presentes, RSVP e mais." },
     ],
   }),
   component: Index,
 });
 
-const WEDDING_DATE = new Date("2026-03-14T17:00:00-03:00");
+const WEDDING_DATE = new Date("2027-03-06T19:00:00-03:00");
 
 const NAV = [
   { id: "historia", label: "História" },
   { id: "galeria", label: "Galeria" },
   { id: "cerimonia", label: "Cerimônia" },
+  { id: "recepcao", label: "Recepção" },
   { id: "local", label: "Local" },
   { id: "presentes", label: "Presentes" },
   { id: "rsvp", label: "RSVP" },
@@ -171,7 +193,7 @@ function Hero() {
         >
           <Ornament />
           <p className="font-serif-display text-lg md:text-2xl tracking-[0.4em] uppercase">
-            14 · 03 · 2026
+            06 · 03 · 2027
           </p>
         </motion.div>
 
@@ -311,39 +333,83 @@ function Galeria() {
   );
 }
 
+function EventCard({
+  icon: Icon,
+  eyebrow,
+  title,
+  time,
+  place,
+  address,
+  mapsUrl,
+  note,
+}: {
+  icon: typeof Calendar;
+  eyebrow: string;
+  title: string;
+  time: string;
+  place: string;
+  address: string;
+  mapsUrl: string;
+  note: string;
+}) {
+  return (
+    <motion.div
+      {...fadeUp}
+      className="border border-border bg-card p-10 md:p-14 text-center shadow-[0_20px_60px_-40px_rgba(0,0,0,0.3)]"
+    >
+      <Icon className="mx-auto text-fuchsia" size={22} />
+      <p className="mt-4 text-[10px] uppercase tracking-[0.4em] text-foreground/50">{eyebrow}</p>
+      <h3 className="font-serif-display text-3xl mt-3">{title}</h3>
+      <p className="font-script text-4xl text-fuchsia mt-4">{time}</p>
+      <div className="mx-auto my-6 h-px w-16 bg-gold/60" />
+      <p className="uppercase tracking-[0.3em] text-xs text-foreground/70">{place}</p>
+      <p className="mt-3 text-sm text-foreground/70 leading-relaxed whitespace-pre-line">{address}</p>
+      <p className="mt-5 text-xs italic text-foreground/60">{note}</p>
+      <a
+        href={mapsUrl}
+        target="_blank"
+        rel="noreferrer"
+        className="inline-block mt-8 border border-foreground/80 px-8 py-3 text-[11px] uppercase tracking-[0.3em] hover:bg-foreground hover:text-background transition-colors"
+      >
+        Como chegar
+      </a>
+    </motion.div>
+  );
+}
+
 function Cerimonia() {
   return (
-    <Section id="cerimonia" eyebrow="Save the date" title="Cerimônia & Recepção">
-      <div className="grid md:grid-cols-2 gap-10">
-        {[
-          {
-            icon: Calendar,
-            title: "Cerimônia",
-            time: "17h00",
-            place: "Capela Santa Clara",
-            note: "Traje passeio completo. Recepção logo após a cerimônia.",
-          },
-          {
-            icon: Heart,
-            title: "Recepção",
-            time: "19h00",
-            place: "Villa Bianca",
-            note: "Jantar, brindes e muito amor. Confirme presença até 14.02.2026.",
-          },
-        ].map((c) => (
-          <motion.div
-            key={c.title}
-            {...fadeUp}
-            className="border border-border bg-card p-10 md:p-14 text-center shadow-[0_20px_60px_-40px_rgba(0,0,0,0.3)]"
-          >
-            <c.icon className="mx-auto text-fuchsia" size={22} />
-            <h3 className="font-serif-display text-3xl mt-6">{c.title}</h3>
-            <p className="font-script text-4xl text-fuchsia mt-4">{c.time}</p>
-            <p className="mt-4 uppercase tracking-[0.3em] text-xs text-foreground/70">{c.place}</p>
-            <div className="mx-auto my-6 h-px w-16 bg-gold/60" />
-            <p className="text-sm text-foreground/70 leading-relaxed">{c.note}</p>
-          </motion.div>
-        ))}
+    <Section id="cerimonia" eyebrow="06 · Março · 2027" title="A Cerimônia">
+      <div className="max-w-2xl mx-auto">
+        <EventCard
+          icon={Church}
+          eyebrow="Celebração religiosa"
+          title="Igreja Santa Cecília"
+          time="19h00"
+          place="Igreja Santa Cecília"
+          address={"Av. Jorge Tibiriçá, 364 — Centro\nCruzeiro · SP · 12701-020"}
+          mapsUrl="https://www.google.com/maps/search/?api=1&query=Igreja+Santa+Cec%C3%ADlia+Av.+Jorge+Tibiri%C3%A7%C3%A1+364+Cruzeiro+SP"
+          note="Pedimos a gentileza de chegar 30 minutos antes. Traje: passeio completo."
+        />
+      </div>
+    </Section>
+  );
+}
+
+function Recepcao() {
+  return (
+    <Section id="recepcao" eyebrow="Logo após a cerimônia" title="A Recepção" className="bg-offwhite">
+      <div className="max-w-2xl mx-auto">
+        <EventCard
+          icon={Wine}
+          eyebrow="Jantar & celebração"
+          title="Saruê"
+          time="21h00"
+          place="Saruê Eventos"
+          address={"R. Ver. Aurélio Garcês Novaes, 81 — Itagaçaba\nCruzeiro · SP · 12730-130"}
+          mapsUrl="https://www.google.com/maps/search/?api=1&query=Saru%C3%AA+R.+Ver.+Aur%C3%A9lio+Gar%C3%A7%C3%AAs+Novaes+81+Cruzeiro+SP"
+          note="Jantar, brindes, dança e muito amor. Confirme sua presença até 06.02.2027."
+        />
       </div>
     </Section>
   );
@@ -351,12 +417,12 @@ function Cerimonia() {
 
 function Local() {
   return (
-    <Section id="local" eyebrow="Onde nos encontrar" title="O Local">
+    <Section id="local" eyebrow="Onde nos encontrar" title="Localização">
       <motion.div {...fadeUp} className="space-y-8">
         <div className="relative overflow-hidden">
           <img
             src={venueImg}
-            alt="Villa Bianca"
+            alt="Saruê — Cruzeiro/SP"
             width={1536}
             height={1024}
             loading="lazy"
@@ -367,13 +433,13 @@ function Local() {
           <div className="space-y-4">
             <p className="flex items-center gap-3 text-foreground/80">
               <MapPin size={18} className="text-fuchsia" />
-              Rua das Acácias, 1500 — Jardim das Flores, SP
+              R. Ver. Aurélio Garcês Novaes, 81 — Itagaçaba, Cruzeiro/SP
             </p>
             <p className="text-sm text-foreground/70 leading-relaxed max-w-md">
-              Um refúgio cercado de jardins e luz natural, escolhido com carinho para receber as pessoas mais importantes das nossas vidas.
+              Um refúgio cercado de jardins e luz natural, escolhido com carinho para receber as pessoas mais importantes das nossas vidas. A apenas alguns minutos da Igreja Santa Cecília.
             </p>
             <a
-              href="https://maps.google.com/?q=Villa+Bianca"
+              href="https://www.google.com/maps/search/?api=1&query=Saru%C3%AA+R.+Ver.+Aur%C3%A9lio+Gar%C3%A7%C3%AAs+Novaes+81+Cruzeiro+SP"
               target="_blank"
               rel="noreferrer"
               className="inline-block mt-4 border border-foreground/80 px-8 py-3 text-[11px] uppercase tracking-[0.3em] hover:bg-foreground hover:text-background transition-colors"
@@ -384,7 +450,7 @@ function Local() {
           <div className="aspect-[4/3] w-full overflow-hidden border border-border">
             <iframe
               title="Mapa do local"
-              src="https://www.google.com/maps?q=-23.5505,-46.6333&z=14&output=embed"
+              src="https://www.google.com/maps?q=Saru%C3%AA+R.+Ver.+Aur%C3%A9lio+Gar%C3%A7%C3%AAs+Novaes+81+Cruzeiro+SP&z=15&output=embed"
               className="h-full w-full grayscale"
               loading="lazy"
             />
@@ -395,107 +461,383 @@ function Local() {
   );
 }
 
+type GiftCategory = {
+  id: string;
+  label: string;
+  icon: typeof Gift;
+};
+
+const GIFT_CATEGORIES: GiftCategory[] = [
+  { id: "todos", label: "Todos", icon: Sparkles },
+  { id: "cozinha", label: "Cozinha", icon: Utensils },
+  { id: "lua-de-mel", label: "Lua de mel", icon: Plane },
+  { id: "casa", label: "Casa nova", icon: HomeIcon },
+  { id: "eletro", label: "Eletrodomésticos", icon: Sparkles },
+  { id: "deco", label: "Decoração", icon: Sofa },
+  { id: "experiencias", label: "Experiências", icon: Camera },
+  { id: "cotas", label: "Cotas simbólicas", icon: Coins },
+  { id: "pix", label: "PIX & Dinheiro", icon: Wallet },
+];
+
+type GiftItem = {
+  name: string;
+  desc: string;
+  value: string;
+  category: string;
+  image: string;
+  cta?: string;
+};
+
+const GIFTS: GiftItem[] = [
+  {
+    name: "Jogo de panelas",
+    desc: "Para os jantares românticos do nosso lar",
+    value: "R$ 480",
+    category: "cozinha",
+    image: "https://images.unsplash.com/photo-1584990347449-a2d4c2c9a3a6?w=900&q=80&auto=format&fit=crop",
+  },
+  {
+    name: "Faqueiro completo",
+    desc: "Para receber os queridos à mesa",
+    value: "R$ 320",
+    category: "cozinha",
+    image: "https://images.unsplash.com/photo-1611078489935-0cb964de46d6?w=900&q=80&auto=format&fit=crop",
+  },
+  {
+    name: "Cafeteira italiana",
+    desc: "Para as manhãs lentas a dois",
+    value: "R$ 220",
+    category: "cozinha",
+    image: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=900&q=80&auto=format&fit=crop",
+  },
+  {
+    name: "Passagens aéreas",
+    desc: "Um trecho da nossa lua de mel",
+    value: "R$ 1.200",
+    category: "lua-de-mel",
+    image: "https://images.unsplash.com/photo-1488085061387-422e29b40080?w=900&q=80&auto=format&fit=crop",
+  },
+  {
+    name: "Diária romântica",
+    desc: "Uma noite especial em hotel boutique",
+    value: "R$ 850",
+    category: "lua-de-mel",
+    image: "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=900&q=80&auto=format&fit=crop",
+  },
+  {
+    name: "Jantar à beira-mar",
+    desc: "Um brinde ao nosso amor",
+    value: "R$ 400",
+    category: "lua-de-mel",
+    image: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=900&q=80&auto=format&fit=crop",
+  },
+  {
+    name: "Jogo de cama king",
+    desc: "Para as noites mais aconchegantes",
+    value: "R$ 380",
+    category: "casa",
+    image: "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=900&q=80&auto=format&fit=crop",
+  },
+  {
+    name: "Jogo de toalhas",
+    desc: "Conforto para o dia a dia",
+    value: "R$ 250",
+    category: "casa",
+    image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=900&q=80&auto=format&fit=crop",
+  },
+  {
+    name: "Air fryer",
+    desc: "Praticidade para o nosso dia a dia",
+    value: "R$ 650",
+    category: "eletro",
+    image: "https://images.unsplash.com/photo-1574269910231-bc508bcb6dbf?w=900&q=80&auto=format&fit=crop",
+  },
+  {
+    name: "Liquidificador premium",
+    desc: "Para sucos, sopas e mais",
+    value: "R$ 480",
+    category: "eletro",
+    image: "https://images.unsplash.com/photo-1570222094114-d054a817e56b?w=900&q=80&auto=format&fit=crop",
+  },
+  {
+    name: "Vasos decorativos",
+    desc: "Para dar vida aos cantinhos da casa",
+    value: "R$ 180",
+    category: "deco",
+    image: "https://images.unsplash.com/photo-1602874801006-e26c4c5b5a4a?w=900&q=80&auto=format&fit=crop",
+  },
+  {
+    name: "Quadros para sala",
+    desc: "Memórias na parede",
+    value: "R$ 300",
+    category: "deco",
+    image: "https://images.unsplash.com/photo-1513519245088-0e12902e5a38?w=900&q=80&auto=format&fit=crop",
+  },
+  {
+    name: "Ensaio fotográfico",
+    desc: "Para eternizar nossa lua de mel",
+    value: "R$ 700",
+    category: "experiencias",
+    image: "https://images.unsplash.com/photo-1519741497674-611481863552?w=900&q=80&auto=format&fit=crop",
+  },
+  {
+    name: "Passeio de barco",
+    desc: "Um dia inesquecível a dois",
+    value: "R$ 600",
+    category: "experiencias",
+    image: "https://images.unsplash.com/photo-1502920917128-1aa500764cbd?w=900&q=80&auto=format&fit=crop",
+  },
+  {
+    name: "Cota Champagne",
+    desc: "Um brinde simbólico ao nosso amor",
+    value: "R$ 80",
+    category: "cotas",
+    image: "https://images.unsplash.com/photo-1543007630-9710e4a00a20?w=900&q=80&auto=format&fit=crop",
+  },
+  {
+    name: "Cota Pétalas",
+    desc: "Para enfeitar o nosso altar",
+    value: "R$ 50",
+    category: "cotas",
+    image: "https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=900&q=80&auto=format&fit=crop",
+  },
+  {
+    name: "Cota Velas",
+    desc: "Luz para o nosso novo lar",
+    value: "R$ 30",
+    category: "cotas",
+    image: "https://images.unsplash.com/photo-1602874801006-e26c4c5b5a4a?w=900&q=80&auto=format&fit=crop",
+  },
+  {
+    name: "PIX livre",
+    desc: "Contribua com o valor que desejar",
+    value: "Valor livre",
+    category: "pix",
+    image: "https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=900&q=80&auto=format&fit=crop",
+    cta: "Copiar chave PIX",
+  },
+  {
+    name: "Envelope dourado",
+    desc: "Presente em dinheiro com elegância",
+    value: "R$ 200",
+    category: "pix",
+    image: "https://images.unsplash.com/photo-1556742400-b5b7c5121f7a?w=900&q=80&auto=format&fit=crop",
+  },
+];
+
 function Presentes() {
-  const gifts = [
-    { name: "Lua de Mel", desc: "Contribua com nossa viagem dos sonhos", value: "Valor livre" },
-    { name: "Nosso Lar", desc: "Itens para começarmos a nossa casa", value: "A partir de R$ 150" },
-    { name: "Cota Especial", desc: "Um mimo para o grande dia", value: "R$ 300" },
-  ];
+  const [active, setActive] = useState("todos");
+  const filtered = useMemo(
+    () => (active === "todos" ? GIFTS : GIFTS.filter((g) => g.category === active)),
+    [active],
+  );
   return (
     <Section id="presentes" eyebrow="Com carinho" title="Lista de Presentes" className="bg-offwhite">
-      <div className="grid md:grid-cols-3 gap-6">
-        {gifts.map((g, i) => (
-          <motion.div
-            key={g.name}
+      <motion.div {...fadeUp} className="flex flex-wrap justify-center gap-2 md:gap-3 mb-14">
+        {GIFT_CATEGORIES.map((c) => {
+          const Icon = c.icon;
+          const on = active === c.id;
+          return (
+            <button
+              key={c.id}
+              onClick={() => setActive(c.id)}
+              className={`group inline-flex items-center gap-2 border px-4 md:px-5 py-2.5 text-[10px] uppercase tracking-[0.25em] transition-all ${
+                on
+                  ? "border-foreground bg-foreground text-background"
+                  : "border-border bg-card text-foreground/70 hover:border-foreground/60"
+              }`}
+            >
+              <Icon size={12} className={on ? "text-gold" : "text-fuchsia"} />
+              {c.label}
+            </button>
+          );
+        })}
+      </motion.div>
+
+      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+        {filtered.map((g, i) => (
+          <motion.article
+            key={g.name + i}
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: i * 0.1 }}
-            className="group bg-card p-10 text-center border border-border hover:border-fuchsia/50 transition-colors"
+            viewport={{ once: true, margin: "-50px" }}
+            transition={{ duration: 0.7, delay: (i % 6) * 0.06, ease: [0.22, 1, 0.36, 1] }}
+            className="group bg-card border border-border overflow-hidden flex flex-col hover:border-fuchsia/40 transition-colors shadow-[0_20px_60px_-50px_rgba(0,0,0,0.35)]"
           >
-            <Gift size={20} className="mx-auto text-gold group-hover:text-fuchsia transition-colors" />
-            <h3 className="font-serif-display text-2xl mt-6">{g.name}</h3>
-            <div className="mx-auto my-5 h-px w-12 bg-gold/60" />
-            <p className="text-sm text-foreground/70 leading-relaxed">{g.desc}</p>
-            <p className="mt-5 text-xs uppercase tracking-[0.25em] text-foreground/60">{g.value}</p>
-            <button className="mt-8 w-full border border-foreground/80 py-3 text-[11px] uppercase tracking-[0.3em] hover:bg-foreground hover:text-background transition-colors">
-              Presentear
-            </button>
-          </motion.div>
+            <div className="relative aspect-[4/3] overflow-hidden bg-offwhite">
+              <img
+                src={g.image}
+                alt={g.name}
+                loading="lazy"
+                className="h-full w-full object-cover transition-transform duration-[1400ms] group-hover:scale-105"
+              />
+              <div className="absolute top-3 left-3 bg-background/90 backdrop-blur px-3 py-1 text-[9px] uppercase tracking-[0.25em] text-foreground/70">
+                {GIFT_CATEGORIES.find((c) => c.id === g.category)?.label}
+              </div>
+            </div>
+            <div className="p-7 text-center flex-1 flex flex-col">
+              <h3 className="font-serif-display text-xl">{g.name}</h3>
+              <div className="mx-auto my-4 h-px w-10 bg-gold/60" />
+              <p className="text-sm text-foreground/70 leading-relaxed flex-1">{g.desc}</p>
+              <p className="mt-5 font-serif-display text-2xl text-foreground">{g.value}</p>
+              <button className="mt-6 w-full border border-foreground/80 py-3 text-[10px] uppercase tracking-[0.3em] hover:bg-foreground hover:text-background transition-colors">
+                {g.cta ?? "Presentear"}
+              </button>
+            </div>
+          </motion.article>
         ))}
       </div>
     </Section>
   );
 }
 
+type Family = { id: string; name: string; members: string[] };
+
+const FAMILIES: Family[] = [
+  { id: "silva", name: "Família Silva", members: ["Carlos Silva", "Marta Silva", "Pedro Silva", "Ana Silva"] },
+  { id: "oliveira", name: "Família Oliveira", members: ["Roberto Oliveira", "Helena Oliveira", "Lucas Oliveira"] },
+  { id: "santos", name: "Família Santos", members: ["José Santos", "Maria Santos", "Beatriz Santos", "Rafael Santos"] },
+  { id: "almeida", name: "Família Almeida", members: ["Eduardo Almeida", "Camila Almeida"] },
+  { id: "ferreira", name: "Família Ferreira", members: ["Marcelo Ferreira", "Patrícia Ferreira", "Júlia Ferreira"] },
+  { id: "costa", name: "Família Costa", members: ["André Costa", "Renata Costa", "Sofia Costa", "Miguel Costa"] },
+];
+
 function RSVP() {
-  const [sent, setSent] = useState(false);
+  const [step, setStep] = useState<"familia" | "membros" | "sucesso">("familia");
+  const [familyId, setFamilyId] = useState<string | null>(null);
+  const [selected, setSelected] = useState<string[]>([]);
+  const [message, setMessage] = useState("");
+
+  const family = FAMILIES.find((f) => f.id === familyId) ?? null;
+
+  function reset() {
+    setStep("familia");
+    setFamilyId(null);
+    setSelected([]);
+    setMessage("");
+  }
+
   return (
     <Section id="rsvp" eyebrow="Confirme sua presença" title="RSVP">
-      <motion.form
+      <motion.div
         {...fadeUp}
-        onSubmit={(e) => {
-          e.preventDefault();
-          setSent(true);
-        }}
-        className="mx-auto max-w-2xl space-y-8 bg-card border border-border p-10 md:p-14 shadow-[0_30px_80px_-50px_rgba(0,0,0,0.3)]"
+        className="mx-auto max-w-2xl bg-card border border-border p-8 md:p-14 shadow-[0_30px_80px_-50px_rgba(0,0,0,0.3)]"
       >
-        {sent ? (
-          <div className="text-center py-10">
-            <Heart className="mx-auto text-fuchsia" size={28} fill="currentColor" />
-            <p className="font-serif-display text-3xl mt-6">Obrigado!</p>
-            <p className="mt-4 text-foreground/70">Sua presença foi confirmada com carinho.</p>
+        {step === "familia" && (
+          <div>
+            <p className="text-center text-sm text-foreground/70 mb-10 leading-relaxed">
+              Para manter este momento íntimo, selecione abaixo a <em className="font-serif-display not-italic">sua família</em> para acessarmos sua lista privada de convidados.
+            </p>
+            <div className="grid sm:grid-cols-2 gap-3">
+              {FAMILIES.map((f) => (
+                <button
+                  key={f.id}
+                  onClick={() => {
+                    setFamilyId(f.id);
+                    setSelected([]);
+                    setStep("membros");
+                  }}
+                  className="group text-left border border-border bg-background hover:border-fuchsia/60 hover:bg-offwhite transition-all p-5"
+                >
+                  <p className="font-serif-display text-lg">{f.name}</p>
+                  <p className="mt-1 text-[10px] uppercase tracking-[0.25em] text-foreground/50">
+                    {f.members.length} convidado{f.members.length > 1 ? "s" : ""}
+                  </p>
+                </button>
+              ))}
+            </div>
           </div>
-        ) : (
-          <>
+        )}
+
+        {step === "membros" && family && (
+          <div>
+            <button
+              onClick={() => setStep("familia")}
+              className="inline-flex items-center gap-2 text-[10px] uppercase tracking-[0.3em] text-foreground/60 hover:text-foreground transition-colors mb-8"
+            >
+              <ChevronLeft size={12} /> Trocar família
+            </button>
+            <h3 className="font-serif-display text-2xl text-center">{family.name}</h3>
+            <Ornament className="my-6" />
+            <p className="text-center text-sm text-foreground/70 mb-8">
+              Selecione quem irá comparecer:
+            </p>
+            <ul className="space-y-2 mb-8">
+              {family.members.map((m) => {
+                const on = selected.includes(m);
+                return (
+                  <li key={m}>
+                    <label
+                      className={`flex items-center justify-between gap-4 px-5 py-4 border cursor-pointer transition-all ${
+                        on ? "border-foreground bg-offwhite" : "border-border hover:border-foreground/40"
+                      }`}
+                    >
+                      <span className="font-serif-display text-lg">{m}</span>
+                      <span
+                        className={`flex items-center justify-center w-6 h-6 border ${
+                          on ? "border-foreground bg-foreground text-background" : "border-border"
+                        }`}
+                      >
+                        {on && <Check size={14} />}
+                      </span>
+                      <input
+                        type="checkbox"
+                        className="sr-only"
+                        checked={on}
+                        onChange={(e) =>
+                          setSelected((s) => (e.target.checked ? [...s, m] : s.filter((x) => x !== m)))
+                        }
+                      />
+                    </label>
+                  </li>
+                );
+              })}
+            </ul>
             <div>
               <label className="block text-[10px] uppercase tracking-[0.3em] text-foreground/60 mb-3">
-                Seu nome completo
-              </label>
-              <input
-                required
-                type="text"
-                className="w-full border-b border-border bg-transparent py-3 outline-none focus:border-fuchsia transition-colors"
-              />
-            </div>
-            <div>
-              <label className="block text-[10px] uppercase tracking-[0.3em] text-foreground/60 mb-3">
-                E-mail
-              </label>
-              <input
-                required
-                type="email"
-                className="w-full border-b border-border bg-transparent py-3 outline-none focus:border-fuchsia transition-colors"
-              />
-            </div>
-            <div>
-              <label className="block text-[10px] uppercase tracking-[0.3em] text-foreground/60 mb-3">
-                Acompanhantes
-              </label>
-              <select className="w-full border-b border-border bg-transparent py-3 outline-none focus:border-fuchsia transition-colors">
-                <option>Apenas eu</option>
-                <option>+ 1 acompanhante</option>
-                <option>+ 2 acompanhantes</option>
-              </select>
-            </div>
-            <div>
-              <label className="block text-[10px] uppercase tracking-[0.3em] text-foreground/60 mb-3">
-                Recado para os noivos
+                Recado para os noivos (opcional)
               </label>
               <textarea
                 rows={3}
-                className="w-full border-b border-border bg-transparent py-3 outline-none focus:border-fuchsia transition-colors resize-none"
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+                className="w-full border border-border bg-background p-4 outline-none focus:border-fuchsia transition-colors resize-none text-sm"
               />
             </div>
             <button
-              type="submit"
-              className="w-full border border-foreground py-4 text-[11px] uppercase tracking-[0.4em] hover:bg-foreground hover:text-background transition-colors"
+              disabled={selected.length === 0}
+              onClick={() => setStep("sucesso")}
+              className="mt-8 w-full border border-foreground py-4 text-[11px] uppercase tracking-[0.4em] hover:bg-foreground hover:text-background transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
             >
               Confirmar presença
             </button>
-          </>
+          </div>
         )}
-      </motion.form>
+
+        {step === "sucesso" && family && (
+          <div className="text-center py-6">
+            <Heart className="mx-auto text-fuchsia" size={28} fill="currentColor" />
+            <p className="font-serif-display text-3xl md:text-4xl mt-6">Com todo carinho, obrigado!</p>
+            <Ornament className="my-8" />
+            <p className="text-foreground/70 leading-relaxed max-w-md mx-auto">
+              A presença de <span className="font-serif-display italic">{family.name}</span> foi confirmada com {selected.length} convidado{selected.length > 1 ? "s" : ""}. Mal podemos esperar para celebrar esse dia ao seu lado.
+            </p>
+            <ul className="mt-6 inline-flex flex-wrap justify-center gap-2">
+              {selected.map((m) => (
+                <li key={m} className="text-[10px] uppercase tracking-[0.25em] border border-border px-3 py-1.5 bg-offwhite">
+                  {m}
+                </li>
+              ))}
+            </ul>
+            <button
+              onClick={reset}
+              className="mt-10 text-[10px] uppercase tracking-[0.3em] text-foreground/60 hover:text-foreground transition-colors"
+            >
+              Confirmar outra família
+            </button>
+          </div>
+        )}
+      </motion.div>
     </Section>
   );
 }
@@ -555,9 +897,10 @@ function Footer() {
   return (
     <footer className="bg-foreground text-background/60 border-t border-white/10 py-10 px-6 text-center text-[10px] uppercase tracking-[0.3em]">
       <a href="mailto:noivos@jheanegiovanna.com" className="inline-flex items-center gap-2 hover:text-background">
-        <Mail size={12} /> noivos@jheanegiovanna.com
+        <Mail size={12} />
+        <span>noivos@jheanegiovanna.com</span>
       </a>
-      <p className="mt-4">© 2026 — Feito com amor</p>
+      <p className="mt-4">© 2027 — Feito com amor</p>
     </footer>
   );
 }
@@ -571,6 +914,7 @@ function Index() {
         <Historia />
         <Galeria />
         <Cerimonia />
+        <Recepcao />
         <Local />
         <Presentes />
         <RSVP />
