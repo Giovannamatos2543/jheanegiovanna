@@ -30,6 +30,7 @@ import gallery2 from "@/assets/gallery-2.jpg";
 import gallery3 from "@/assets/gallery-3.jpg";
 import gallery4 from "@/assets/gallery-4.jpg";
 import venueImg from "@/assets/venue.jpg";
+import ceremonyImg from "@/assets/ceremony-church.jpg";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -380,6 +381,19 @@ function EventCard({
 function Cerimonia() {
   return (
     <Section id="cerimonia" eyebrow="06 · Março · 2027" title="A Cerimônia">
+      <motion.div
+        {...fadeUp}
+        className="relative overflow-hidden mb-12 shadow-[0_30px_80px_-40px_rgba(0,0,0,0.35)] rounded-sm max-w-5xl mx-auto"
+      >
+        <img
+          src={ceremonyImg}
+          alt="Igreja Santa Cecília — Cruzeiro/SP"
+          loading="lazy"
+          className="w-full aspect-[16/10] md:aspect-[21/9] object-cover object-center"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-black/10 pointer-events-none" />
+        <div className="absolute inset-0 ring-1 ring-inset ring-white/20 pointer-events-none" />
+      </motion.div>
       <div className="max-w-2xl mx-auto">
         <EventCard
           icon={Church}
