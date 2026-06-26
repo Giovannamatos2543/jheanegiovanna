@@ -595,7 +595,34 @@ const GIFTS: GiftItem[] = [
   },
 ];
 
-function Presentes() {
+function DressCode() {
+  return (
+    <Section id="dresscode" eyebrow="Traje" title="Dress Code">
+      <motion.div
+        {...fadeUp}
+        className="mx-auto max-w-2xl border border-gold/40 bg-card p-12 md:p-16 text-center shadow-[0_20px_60px_-40px_rgba(0,0,0,0.3)]"
+      >
+        <Gem className="mx-auto text-fuchsia" size={28} />
+        <p className="mt-5 text-[10px] uppercase tracking-[0.4em] text-foreground/50">
+          Elegância e conforto
+        </p>
+        <h3 className="font-serif-display text-3xl md:text-4xl mt-4">Traje Social</h3>
+        <div className="mx-auto my-6 h-px w-16 bg-gold/60" />
+        <p className="text-foreground/80 leading-relaxed text-lg">
+          Para tornar este dia ainda mais especial, pedimos gentilmente que nossos convidados utilizem traje social.
+        </p>
+        <p className="mt-6 text-sm italic text-foreground/60">
+          Queremos que todos estejam confortáveis e elegantes para celebrar esse momento inesquecível conosco.
+        </p>
+        <div className="mt-8 flex justify-center">
+          <Ornament />
+        </div>
+      </motion.div>
+    </Section>
+  );
+}
+
+
   const [active, setActive] = useState("todos");
   const filtered = useMemo(
     () => (active === "todos" ? GIFTS : GIFTS.filter((g) => g.category === active)),
