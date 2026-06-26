@@ -21,6 +21,7 @@ import {
   Camera,
   Coins,
   Wallet,
+  Gem,
 } from "lucide-react";
 
 import heroCouple from "@/assets/hero-couple.jpg";
@@ -47,6 +48,7 @@ const NAV = [
   { id: "galeria", label: "Galeria" },
   { id: "cerimonia", label: "Cerimônia" },
   { id: "recepcao", label: "Recepção" },
+  { id: "dresscode", label: "Dress Code" },
   { id: "presentes", label: "Presentes" },
   { id: "rsvp", label: "RSVP" },
   { id: "playlist", label: "Playlist" },
