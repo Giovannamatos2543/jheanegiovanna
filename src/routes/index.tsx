@@ -623,7 +623,6 @@ function DressCode() {
 }
 
 function Presentes() {
-
   const [active, setActive] = useState("todos");
   const filtered = useMemo(
     () => (active === "todos" ? GIFTS : GIFTS.filter((g) => g.category === active)),
