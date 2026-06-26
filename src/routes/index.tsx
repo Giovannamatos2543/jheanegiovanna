@@ -3,7 +3,6 @@ import { useEffect, useMemo, useState } from "react";
 import { motion } from "motion/react";
 import {
   Heart,
-  MapPin,
   Music2,
   Gift,
   Calendar,
@@ -29,7 +28,6 @@ import gallery1 from "@/assets/gallery-1.jpg";
 import gallery2 from "@/assets/gallery-2.jpg";
 import gallery3 from "@/assets/gallery-3.jpg";
 import gallery4 from "@/assets/gallery-4.jpg";
-import venueImg from "@/assets/venue.jpg";
 import ceremonyImg from "@/assets/ceremony-church.jpg";
 
 export const Route = createFileRoute("/")({
@@ -49,7 +47,6 @@ const NAV = [
   { id: "galeria", label: "Galeria" },
   { id: "cerimonia", label: "Cerimônia" },
   { id: "recepcao", label: "Recepção" },
-  { id: "local", label: "Local" },
   { id: "presentes", label: "Presentes" },
   { id: "rsvp", label: "RSVP" },
   { id: "playlist", label: "Playlist" },
@@ -431,51 +428,6 @@ function Recepcao() {
   );
 }
 
-function Local() {
-  return (
-    <Section id="local" eyebrow="Onde nos encontrar" title="Localização">
-      <motion.div {...fadeUp} className="space-y-8">
-        <div className="relative overflow-hidden">
-          <img
-            src={venueImg}
-            alt="Saruê — Cruzeiro/SP"
-            width={1536}
-            height={1024}
-            loading="lazy"
-            className="w-full aspect-[16/9] object-cover"
-          />
-        </div>
-        <div className="grid md:grid-cols-2 gap-8 items-center">
-          <div className="space-y-4">
-            <p className="flex items-center gap-3 text-foreground/80">
-              <MapPin size={18} className="text-fuchsia" />
-              R. Ver. Aurélio Garcês Novaes, 81 — Itagaçaba, Cruzeiro/SP
-            </p>
-            <p className="text-sm text-foreground/70 leading-relaxed max-w-md">
-              Um refúgio cercado de jardins e luz natural, escolhido com carinho para receber as pessoas mais importantes das nossas vidas. A apenas alguns minutos da Igreja Santa Cecília.
-            </p>
-            <a
-              href="https://www.google.com/maps/search/?api=1&query=Saru%C3%AA+R.+Ver.+Aur%C3%A9lio+Gar%C3%A7%C3%AAs+Novaes+81+Cruzeiro+SP"
-              target="_blank"
-              rel="noreferrer"
-              className="inline-block mt-4 border border-foreground/80 px-8 py-3 text-[11px] uppercase tracking-[0.3em] hover:bg-foreground hover:text-background transition-colors"
-            >
-              Ver no mapa
-            </a>
-          </div>
-          <div className="aspect-[4/3] w-full overflow-hidden border border-border">
-            <iframe
-              title="Mapa do local"
-              src="https://www.google.com/maps?q=Saru%C3%AA+R.+Ver.+Aur%C3%A9lio+Gar%C3%A7%C3%AAs+Novaes+81+Cruzeiro+SP&z=15&output=embed"
-              className="h-full w-full grayscale"
-              loading="lazy"
-            />
-          </div>
-        </div>
-      </motion.div>
-    </Section>
-  );
-}
 
 type GiftCategory = {
   id: string;
@@ -931,7 +883,6 @@ function Index() {
         <Galeria />
         <Cerimonia />
         <Recepcao />
-        <Local />
         <Presentes />
         <RSVP />
         <Playlist />
