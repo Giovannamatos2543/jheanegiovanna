@@ -913,6 +913,7 @@ function Index() {
         <Galeria />
         <Cerimonia />
         <Recepcao />
+        <DressCode />
         <Presentes />
         <RSVP />
         <Playlist />
