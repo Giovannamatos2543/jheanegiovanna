@@ -29,7 +29,6 @@ import gallery1 from "@/assets/gallery-1.jpg";
 import gallery2 from "@/assets/gallery-2.jpg";
 import gallery3 from "@/assets/gallery-3.jpg";
 import gallery4 from "@/assets/gallery-4.jpg";
-import venueImg from "@/assets/venue.jpg";
 import ceremonyImg from "@/assets/ceremony-church.jpg";
 
 export const Route = createFileRoute("/")({
@@ -49,7 +48,6 @@ const NAV = [
   { id: "galeria", label: "Galeria" },
   { id: "cerimonia", label: "Cerimônia" },
   { id: "recepcao", label: "Recepção" },
-  { id: "local", label: "Local" },
   { id: "presentes", label: "Presentes" },
   { id: "rsvp", label: "RSVP" },
   { id: "playlist", label: "Playlist" },
