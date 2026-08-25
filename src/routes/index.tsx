@@ -841,36 +841,8 @@ function RSVP() {
   );
 }
 
-function Playlist() {
-  const songs = [
-    { title: "At Last", artist: "Etta James" },
-    { title: "La Vie en Rose", artist: "Édith Piaf" },
-    { title: "Can't Help Falling in Love", artist: "Elvis Presley" },
-    { title: "All of Me", artist: "John Legend" },
-    { title: "Thinking Out Loud", artist: "Ed Sheeran" },
-    { title: "Como é Grande o Meu Amor", artist: "Roberto Carlos" },
-  ];
-  return (
-    <Section id="playlist" eyebrow="Trilha do nosso amor" title="Playlist do Casal" className="bg-offwhite">
-      <motion.div {...fadeUp} className="mx-auto max-w-2xl">
-        <ul className="divide-y divide-border border-y border-border">
-          {songs.map((s, i) => (
-            <li key={s.title} className="flex items-center gap-6 py-5">
-              <span className="font-serif-display text-2xl text-gold w-8 tabular-nums">
-                {String(i + 1).padStart(2, "0")}
-              </span>
-              <div className="flex-1">
-                <p className="font-serif-display text-lg">{s.title}</p>
-                <p className="text-xs uppercase tracking-[0.2em] text-foreground/60 mt-1">{s.artist}</p>
-              </div>
-              <Music2 size={16} className="text-fuchsia" />
-            </li>
-          ))}
-        </ul>
-      </motion.div>
-    </Section>
-  );
-}
+
+
 
 function Final() {
   return (
