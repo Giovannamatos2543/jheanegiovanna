@@ -719,8 +719,8 @@ function RSVP() {
       <motion.div
         {...fadeUp}
         className="card-elegant mx-auto max-w-2xl p-8 md:p-14"
-
       >
+
         {step === "familia" && (
           <div>
             <p className="text-center text-sm text-foreground/70 mb-10 leading-relaxed">
