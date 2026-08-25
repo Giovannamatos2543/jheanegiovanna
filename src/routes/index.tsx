@@ -3,7 +3,6 @@ import { useEffect, useMemo, useState } from "react";
 import { motion } from "motion/react";
 import {
   Heart,
-  Music2,
   Gift,
   Calendar,
   Mail,
@@ -22,7 +21,9 @@ import {
   Coins,
   Wallet,
   Gem,
+  Clock,
 } from "lucide-react";
+
 
 import heroCouple from "@/assets/hero-couple.jpg";
 import gallery1 from "@/assets/gallery-1.jpg";
