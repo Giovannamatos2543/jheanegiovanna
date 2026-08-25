@@ -3,7 +3,6 @@ import { useEffect, useMemo, useState } from "react";
 import { motion } from "motion/react";
 import {
   Heart,
-  Music2,
   Gift,
   Calendar,
   Mail,
@@ -22,7 +21,9 @@ import {
   Coins,
   Wallet,
   Gem,
+  Clock,
 } from "lucide-react";
+
 
 import heroCouple from "@/assets/hero-couple.jpg";
 import gallery1 from "@/assets/gallery-1.jpg";
@@ -44,15 +45,14 @@ export const Route = createFileRoute("/")({
 const WEDDING_DATE = new Date("2027-03-06T19:00:00-03:00");
 
 const NAV = [
-  { id: "historia", label: "História" },
   { id: "galeria", label: "Galeria" },
   { id: "cerimonia", label: "Cerimônia" },
   { id: "recepcao", label: "Recepção" },
   { id: "dresscode", label: "Dress Code" },
   { id: "presentes", label: "Presentes" },
   { id: "rsvp", label: "RSVP" },
-  { id: "playlist", label: "Playlist" },
 ];
+
 
 function useCountdown(target: Date) {
   const [now, setNow] = useState<Date | null>(null);
@@ -155,7 +155,9 @@ function Hero() {
           height={1920}
           className="h-full w-full object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/20 to-black/70" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/55 via-black/40 to-black/85" />
+        <div className="absolute inset-0 bg-[radial-gradient(120%_80%_at_50%_50%,transparent_20%,rgba(0,0,0,0.55)_100%)]" />
+
       </div>
 
       {/* Monogram backdrop */}
@@ -194,9 +196,13 @@ function Hero() {
           className="mt-8 flex flex-col items-center gap-4"
         >
           <Ornament />
-          <p className="font-serif-display text-lg md:text-2xl tracking-[0.4em] uppercase">
+          <p className="font-serif-display text-2xl md:text-4xl tracking-[0.35em] uppercase text-gold-gradient">
             06 · 03 · 2027
           </p>
+          <p className="text-[10px] md:text-[11px] uppercase tracking-[0.4em] text-white/80">
+            Cruzeiro · SP · Celebração às 18:30
+          </p>
+
         </motion.div>
 
         <motion.div
@@ -221,7 +227,7 @@ function Hero() {
         </motion.div>
 
         <motion.a
-          href="#historia"
+          href="#galeria"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 1, delay: 2 }}
@@ -248,19 +254,25 @@ function Section({
   className?: string;
 }) {
   return (
-    <section id={id} className={`relative py-28 md:py-40 px-6 md:px-10 ${className}`}>
+    <section id={id} className={`relative py-24 md:py-32 px-6 md:px-10 ${className}`}>
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 top-0 mx-auto h-px max-w-3xl gold-rule"
+      />
       <div className="mx-auto max-w-6xl">
         {(eyebrow || title) && (
-          <motion.div {...fadeUp} className="mb-16 text-center">
+          <motion.div {...fadeUp} className="mb-14 text-center">
             {eyebrow && (
-              <p className="text-[11px] uppercase tracking-[0.5em] text-fuchsia mb-6">{eyebrow}</p>
+              <p className="text-[11px] uppercase tracking-[0.5em] text-fuchsia mb-5 font-normal">
+                {eyebrow}
+              </p>
             )}
             {title && (
-              <h2 className="font-serif-display text-4xl md:text-6xl text-foreground text-balance">
+              <h2 className="font-serif-display text-5xl md:text-7xl text-ink text-balance leading-[1.05]">
                 {title}
               </h2>
             )}
-            <Ornament className="mt-8" />
+            <Ornament className="mt-7" />
           </motion.div>
         )}
         {children}
@@ -269,39 +281,6 @@ function Section({
   );
 }
 
-function Historia() {
-  return (
-    <Section id="historia" eyebrow="Era uma vez" title="Nossa História">
-      <div className="grid md:grid-cols-2 gap-12 md:gap-20 items-center">
-        <motion.div {...fadeUp} className="relative">
-          <img
-            src={gallery1}
-            alt="Jhean e Giovanna juntos"
-            width={1024}
-            height={1280}
-            loading="lazy"
-            className="w-full aspect-[4/5] object-cover shadow-[0_30px_80px_-30px_rgba(0,0,0,0.3)]"
-          />
-          <div className="absolute -inset-3 border border-gold/40 -z-10" />
-        </motion.div>
-        <motion.div {...fadeUp} className="space-y-6 text-foreground/80 leading-relaxed">
-          <p className="font-serif-display italic text-2xl text-foreground">
-            "Em um olhar, a vida inteira mudou."
-          </p>
-          <p>
-            Foi numa tarde qualquer que tudo começou — daquelas em que o tempo se esquece de passar. Entre risos despretensiosos e conversas que pareciam não ter fim, descobrimos que o mundo era melhor quando vivido em dupla.
-          </p>
-          <p>
-            Anos depois, com a mesma cumplicidade do primeiro encontro, decidimos transformar o nosso "para sempre" em promessa. E agora, queremos celebrar esse capítulo cercados de quem nos faz bem.
-          </p>
-          <div className="pt-4">
-            <Ornament className="justify-start" />
-          </div>
-        </motion.div>
-      </div>
-    </Section>
-  );
-}
 
 function Galeria() {
   const photos = [
@@ -311,7 +290,7 @@ function Galeria() {
     { src: gallery1, span: "md:col-span-2 aspect-[16/9]", alt: "Casal sorrindo" },
   ];
   return (
-    <Section id="galeria" eyebrow="Momentos" title="Galeria" className="bg-offwhite">
+    <Section id="galeria" eyebrow="Momentos" title="Galeria" className="surface-warm">
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 auto-rows-[200px] md:auto-rows-[220px]">
         {photos.map((p, i) => (
           <motion.div
@@ -344,6 +323,7 @@ function EventCard({
   address,
   mapsUrl,
   note,
+  alert,
 }: {
   icon: typeof Calendar;
   eyebrow: string;
@@ -353,25 +333,42 @@ function EventCard({
   address: string;
   mapsUrl: string;
   note: string;
+  alert?: string;
 }) {
   return (
-    <motion.div
-      {...fadeUp}
-      className="border border-border bg-card p-10 md:p-14 text-center shadow-[0_20px_60px_-40px_rgba(0,0,0,0.3)]"
-    >
-      <Icon className="mx-auto text-fuchsia" size={22} />
-      <p className="mt-4 text-[10px] uppercase tracking-[0.4em] text-foreground/50">{eyebrow}</p>
-      <h3 className="font-serif-display text-3xl mt-3">{title}</h3>
-      <p className="font-script text-4xl text-fuchsia mt-4">{time}</p>
-      <div className="mx-auto my-6 h-px w-16 bg-gold/60" />
-      <p className="uppercase tracking-[0.3em] text-xs text-foreground/70">{place}</p>
-      <p className="mt-3 text-sm text-foreground/70 leading-relaxed whitespace-pre-line">{address}</p>
-      <p className="mt-5 text-xs italic text-foreground/60">{note}</p>
+    <motion.div {...fadeUp} className="card-elegant relative p-10 md:p-14 text-center">
+      <span aria-hidden className="absolute left-6 top-6 h-6 w-6 border-l border-t border-gold/60" />
+      <span aria-hidden className="absolute right-6 top-6 h-6 w-6 border-r border-t border-gold/60" />
+      <span aria-hidden className="absolute left-6 bottom-6 h-6 w-6 border-l border-b border-gold/60" />
+      <span aria-hidden className="absolute right-6 bottom-6 h-6 w-6 border-r border-b border-gold/60" />
+
+      <Icon className="mx-auto text-fuchsia" size={24} />
+      <p className="mt-4 text-[10px] uppercase tracking-[0.4em] text-foreground/60">{eyebrow}</p>
+      <h3 className="font-serif-display text-4xl md:text-5xl mt-3 text-ink">{title}</h3>
+
+      <div className="mt-7 inline-flex flex-col items-center gap-2 border-y border-gold/50 px-10 py-5">
+        <span className="text-[10px] uppercase tracking-[0.4em] text-foreground/60">Horário</span>
+        <span className="font-serif-display text-5xl md:text-6xl leading-none text-fuchsia tabular-nums">
+          {time}
+        </span>
+      </div>
+
+      {alert && (
+        <div className="mt-7 flex items-start gap-3 border border-fuchsia/35 bg-blush/40 px-6 py-5 text-left">
+          <Clock size={16} className="mt-0.5 shrink-0 text-fuchsia" />
+          <p className="font-serif-display text-lg md:text-xl leading-snug text-ink">{alert}</p>
+        </div>
+      )}
+
+      <div className="mx-auto my-7 h-px w-24 gold-rule" />
+      <p className="uppercase tracking-[0.3em] text-xs text-foreground/80">{place}</p>
+      <p className="mt-3 text-sm text-foreground/75 leading-relaxed whitespace-pre-line">{address}</p>
+      <p className="mt-5 text-xs italic text-foreground/70">{note}</p>
       <a
         href={mapsUrl}
         target="_blank"
         rel="noreferrer"
-        className="inline-block mt-8 border border-foreground/80 px-8 py-3 text-[11px] uppercase tracking-[0.3em] hover:bg-foreground hover:text-background transition-colors"
+        className="inline-block mt-8 border border-ink px-8 py-3 text-[11px] uppercase tracking-[0.3em] hover:bg-ink hover:text-background transition-colors"
       >
         Como chegar
       </a>
@@ -381,10 +378,10 @@ function EventCard({
 
 function Cerimonia() {
   return (
-    <Section id="cerimonia" eyebrow="06 · Março · 2027" title="A Cerimônia">
+    <Section id="cerimonia" eyebrow="06 · Março · 2027" title="A Cerimônia" className="surface-romantic">
       <motion.div
         {...fadeUp}
-        className="relative overflow-hidden mb-12 shadow-[0_30px_80px_-40px_rgba(0,0,0,0.35)] rounded-sm max-w-5xl mx-auto bg-black/5"
+        className="relative overflow-hidden mb-12 shadow-[0_30px_80px_-40px_rgba(0,0,0,0.4)] rounded-sm max-w-5xl mx-auto bg-black/5 ring-1 ring-gold/40"
       >
         <img
           src={ceremonyImg}
@@ -392,7 +389,7 @@ function Cerimonia() {
           loading="lazy"
           className="w-full h-auto object-contain object-center"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-black/10 pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-black/10 pointer-events-none" />
         <div className="absolute inset-0 ring-1 ring-inset ring-white/20 pointer-events-none" />
       </motion.div>
       <div className="max-w-2xl mx-auto">
@@ -400,20 +397,22 @@ function Cerimonia() {
           icon={Church}
           eyebrow="Celebração religiosa"
           title="Igreja Santa Cecília"
-          time="19h00"
+          time="18:30"
+          alert="Pedimos, por favor, que não se atrasem. A celebração terá início pontualmente às 18:30."
           place="Igreja Santa Cecília"
           address={"Av. Jorge Tibiriçá, 364 — Centro\nCruzeiro · SP · 12701-020"}
           mapsUrl="https://www.google.com/maps/search/?api=1&query=Igreja+Santa+Cec%C3%ADlia+Av.+Jorge+Tibiri%C3%A7%C3%A1+364+Cruzeiro+SP"
-          note="Pedimos a gentileza de chegar 30 minutos antes. Traje: passeio completo."
+          note="Traje: passeio completo."
         />
       </div>
     </Section>
   );
 }
 
+
 function Recepcao() {
   return (
-    <Section id="recepcao" eyebrow="Logo após a cerimônia" title="A Recepção" className="bg-offwhite">
+    <Section id="recepcao" eyebrow="Logo após a cerimônia" title="A Recepção" className="surface-warm">
       <div className="max-w-2xl mx-auto">
         <EventCard
           icon={Wine}
@@ -597,11 +596,12 @@ const GIFTS: GiftItem[] = [
 
 function DressCode() {
   return (
-    <Section id="dresscode" eyebrow="Traje" title="Dress Code">
+    <Section id="dresscode" eyebrow="Traje" title="Dress Code" className="surface-romantic">
       <motion.div
         {...fadeUp}
-        className="mx-auto max-w-2xl border border-gold/40 bg-card p-12 md:p-16 text-center shadow-[0_20px_60px_-40px_rgba(0,0,0,0.3)]"
+        className="card-elegant mx-auto max-w-2xl p-12 md:p-16 text-center"
       >
+
         <Gem className="mx-auto text-fuchsia" size={28} />
         <p className="mt-5 text-[10px] uppercase tracking-[0.4em] text-foreground/50">
           Elegância e conforto
@@ -629,7 +629,7 @@ function Presentes() {
     [active],
   );
   return (
-    <Section id="presentes" eyebrow="Com carinho" title="Lista de Presentes" className="bg-offwhite">
+    <Section id="presentes" eyebrow="Com carinho" title="Lista de Presentes" className="surface-warm">
       <motion.div {...fadeUp} className="flex flex-wrap justify-center gap-2 md:gap-3 mb-14">
         {GIFT_CATEGORIES.map((c) => {
           const Icon = c.icon;
@@ -715,11 +715,12 @@ function RSVP() {
   }
 
   return (
-    <Section id="rsvp" eyebrow="Confirme sua presença" title="RSVP">
+    <Section id="rsvp" eyebrow="Confirme sua presença" title="RSVP" className="surface-romantic">
       <motion.div
         {...fadeUp}
-        className="mx-auto max-w-2xl bg-card border border-border p-8 md:p-14 shadow-[0_30px_80px_-50px_rgba(0,0,0,0.3)]"
+        className="card-elegant mx-auto max-w-2xl p-8 md:p-14"
       >
+
         {step === "familia" && (
           <div>
             <p className="text-center text-sm text-foreground/70 mb-10 leading-relaxed">
@@ -839,36 +840,8 @@ function RSVP() {
   );
 }
 
-function Playlist() {
-  const songs = [
-    { title: "At Last", artist: "Etta James" },
-    { title: "La Vie en Rose", artist: "Édith Piaf" },
-    { title: "Can't Help Falling in Love", artist: "Elvis Presley" },
-    { title: "All of Me", artist: "John Legend" },
-    { title: "Thinking Out Loud", artist: "Ed Sheeran" },
-    { title: "Como é Grande o Meu Amor", artist: "Roberto Carlos" },
-  ];
-  return (
-    <Section id="playlist" eyebrow="Trilha do nosso amor" title="Playlist do Casal" className="bg-offwhite">
-      <motion.div {...fadeUp} className="mx-auto max-w-2xl">
-        <ul className="divide-y divide-border border-y border-border">
-          {songs.map((s, i) => (
-            <li key={s.title} className="flex items-center gap-6 py-5">
-              <span className="font-serif-display text-2xl text-gold w-8 tabular-nums">
-                {String(i + 1).padStart(2, "0")}
-              </span>
-              <div className="flex-1">
-                <p className="font-serif-display text-lg">{s.title}</p>
-                <p className="text-xs uppercase tracking-[0.2em] text-foreground/60 mt-1">{s.artist}</p>
-              </div>
-              <Music2 size={16} className="text-fuchsia" />
-            </li>
-          ))}
-        </ul>
-      </motion.div>
-    </Section>
-  );
-}
+
+
 
 function Final() {
   return (
@@ -908,15 +881,14 @@ function Index() {
       <Navbar />
       <main>
         <Hero />
-        <Historia />
         <Galeria />
         <Cerimonia />
         <Recepcao />
         <DressCode />
         <Presentes />
         <RSVP />
-        <Playlist />
         <Final />
+
       </main>
       <Footer />
     </div>
