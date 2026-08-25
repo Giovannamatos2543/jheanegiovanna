@@ -596,10 +596,11 @@ const GIFTS: GiftItem[] = [
 
 function DressCode() {
   return (
-    <Section id="dresscode" eyebrow="Traje" title="Dress Code">
+    <Section id="dresscode" eyebrow="Traje" title="Dress Code" className="surface-romantic">
       <motion.div
         {...fadeUp}
-        className="mx-auto max-w-2xl border border-gold/40 bg-card p-12 md:p-16 text-center shadow-[0_20px_60px_-40px_rgba(0,0,0,0.3)]"
+        className="card-elegant mx-auto max-w-2xl p-12 md:p-16 text-center"
+
       >
         <Gem className="mx-auto text-fuchsia" size={28} />
         <p className="mt-5 text-[10px] uppercase tracking-[0.4em] text-foreground/50">
