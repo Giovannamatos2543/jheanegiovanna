@@ -629,7 +629,7 @@ function Presentes() {
     [active],
   );
   return (
-    <Section id="presentes" eyebrow="Com carinho" title="Lista de Presentes" className="bg-offwhite">
+    <Section id="presentes" eyebrow="Com carinho" title="Lista de Presentes" className="surface-warm">
       <motion.div {...fadeUp} className="flex flex-wrap justify-center gap-2 md:gap-3 mb-14">
         {GIFT_CATEGORIES.map((c) => {
           const Icon = c.icon;
