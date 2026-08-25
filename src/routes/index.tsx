@@ -254,19 +254,25 @@ function Section({
   className?: string;
 }) {
   return (
-    <section id={id} className={`relative py-28 md:py-40 px-6 md:px-10 ${className}`}>
+    <section id={id} className={`relative py-24 md:py-32 px-6 md:px-10 ${className}`}>
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 top-0 mx-auto h-px max-w-3xl gold-rule"
+      />
       <div className="mx-auto max-w-6xl">
         {(eyebrow || title) && (
-          <motion.div {...fadeUp} className="mb-16 text-center">
+          <motion.div {...fadeUp} className="mb-14 text-center">
             {eyebrow && (
-              <p className="text-[11px] uppercase tracking-[0.5em] text-fuchsia mb-6">{eyebrow}</p>
+              <p className="text-[11px] uppercase tracking-[0.5em] text-fuchsia mb-5 font-normal">
+                {eyebrow}
+              </p>
             )}
             {title && (
-              <h2 className="font-serif-display text-4xl md:text-6xl text-foreground text-balance">
+              <h2 className="font-serif-display text-5xl md:text-7xl text-ink text-balance leading-[1.05]">
                 {title}
               </h2>
             )}
-            <Ornament className="mt-8" />
+            <Ornament className="mt-7" />
           </motion.div>
         )}
         {children}
@@ -275,39 +281,6 @@ function Section({
   );
 }
 
-function Historia() {
-  return (
-    <Section id="historia" eyebrow="Era uma vez" title="Nossa História">
-      <div className="grid md:grid-cols-2 gap-12 md:gap-20 items-center">
-        <motion.div {...fadeUp} className="relative">
-          <img
-            src={gallery1}
-            alt="Jhean e Giovanna juntos"
-            width={1024}
-            height={1280}
-            loading="lazy"
-            className="w-full aspect-[4/5] object-cover shadow-[0_30px_80px_-30px_rgba(0,0,0,0.3)]"
-          />
-          <div className="absolute -inset-3 border border-gold/40 -z-10" />
-        </motion.div>
-        <motion.div {...fadeUp} className="space-y-6 text-foreground/80 leading-relaxed">
-          <p className="font-serif-display italic text-2xl text-foreground">
-            "Em um olhar, a vida inteira mudou."
-          </p>
-          <p>
-            Foi numa tarde qualquer que tudo começou — daquelas em que o tempo se esquece de passar. Entre risos despretensiosos e conversas que pareciam não ter fim, descobrimos que o mundo era melhor quando vivido em dupla.
-          </p>
-          <p>
-            Anos depois, com a mesma cumplicidade do primeiro encontro, decidimos transformar o nosso "para sempre" em promessa. E agora, queremos celebrar esse capítulo cercados de quem nos faz bem.
-          </p>
-          <div className="pt-4">
-            <Ornament className="justify-start" />
-          </div>
-        </motion.div>
-      </div>
-    </Section>
-  );
-}
 
 function Galeria() {
   const photos = [
