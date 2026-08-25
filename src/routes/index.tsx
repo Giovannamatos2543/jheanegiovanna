@@ -196,9 +196,13 @@ function Hero() {
           className="mt-8 flex flex-col items-center gap-4"
         >
           <Ornament />
-          <p className="font-serif-display text-lg md:text-2xl tracking-[0.4em] uppercase">
+          <p className="font-serif-display text-2xl md:text-4xl tracking-[0.35em] uppercase text-gold-gradient">
             06 · 03 · 2027
           </p>
+          <p className="text-[10px] md:text-[11px] uppercase tracking-[0.4em] text-white/80">
+            Cruzeiro · SP · Celebração às 18:30
+          </p>
+
         </motion.div>
 
         <motion.div
