@@ -715,10 +715,11 @@ function RSVP() {
   }
 
   return (
-    <Section id="rsvp" eyebrow="Confirme sua presença" title="RSVP">
+    <Section id="rsvp" eyebrow="Confirme sua presença" title="RSVP" className="surface-romantic">
       <motion.div
         {...fadeUp}
-        className="mx-auto max-w-2xl bg-card border border-border p-8 md:p-14 shadow-[0_30px_80px_-50px_rgba(0,0,0,0.3)]"
+        className="card-elegant mx-auto max-w-2xl p-8 md:p-14"
+
       >
         {step === "familia" && (
           <div>
