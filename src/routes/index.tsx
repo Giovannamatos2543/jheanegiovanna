@@ -227,7 +227,7 @@ function Hero() {
         </motion.div>
 
         <motion.a
-          href="#historia"
+          href="#galeria"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 1, delay: 2 }}
