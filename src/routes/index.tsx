@@ -45,15 +45,14 @@ export const Route = createFileRoute("/")({
 const WEDDING_DATE = new Date("2027-03-06T19:00:00-03:00");
 
 const NAV = [
-  { id: "historia", label: "História" },
   { id: "galeria", label: "Galeria" },
   { id: "cerimonia", label: "Cerimônia" },
   { id: "recepcao", label: "Recepção" },
   { id: "dresscode", label: "Dress Code" },
   { id: "presentes", label: "Presentes" },
   { id: "rsvp", label: "RSVP" },
-  { id: "playlist", label: "Playlist" },
 ];
+
 
 function useCountdown(target: Date) {
   const [now, setNow] = useState<Date | null>(null);
