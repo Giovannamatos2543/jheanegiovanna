@@ -323,6 +323,7 @@ function EventCard({
   address,
   mapsUrl,
   note,
+  alert,
 }: {
   icon: typeof Calendar;
   eyebrow: string;
@@ -332,25 +333,42 @@ function EventCard({
   address: string;
   mapsUrl: string;
   note: string;
+  alert?: string;
 }) {
   return (
-    <motion.div
-      {...fadeUp}
-      className="border border-border bg-card p-10 md:p-14 text-center shadow-[0_20px_60px_-40px_rgba(0,0,0,0.3)]"
-    >
-      <Icon className="mx-auto text-fuchsia" size={22} />
-      <p className="mt-4 text-[10px] uppercase tracking-[0.4em] text-foreground/50">{eyebrow}</p>
-      <h3 className="font-serif-display text-3xl mt-3">{title}</h3>
-      <p className="font-script text-4xl text-fuchsia mt-4">{time}</p>
-      <div className="mx-auto my-6 h-px w-16 bg-gold/60" />
-      <p className="uppercase tracking-[0.3em] text-xs text-foreground/70">{place}</p>
-      <p className="mt-3 text-sm text-foreground/70 leading-relaxed whitespace-pre-line">{address}</p>
-      <p className="mt-5 text-xs italic text-foreground/60">{note}</p>
+    <motion.div {...fadeUp} className="card-elegant relative p-10 md:p-14 text-center">
+      <span aria-hidden className="absolute left-6 top-6 h-6 w-6 border-l border-t border-gold/60" />
+      <span aria-hidden className="absolute right-6 top-6 h-6 w-6 border-r border-t border-gold/60" />
+      <span aria-hidden className="absolute left-6 bottom-6 h-6 w-6 border-l border-b border-gold/60" />
+      <span aria-hidden className="absolute right-6 bottom-6 h-6 w-6 border-r border-b border-gold/60" />
+
+      <Icon className="mx-auto text-fuchsia" size={24} />
+      <p className="mt-4 text-[10px] uppercase tracking-[0.4em] text-foreground/60">{eyebrow}</p>
+      <h3 className="font-serif-display text-4xl md:text-5xl mt-3 text-ink">{title}</h3>
+
+      <div className="mt-7 inline-flex flex-col items-center gap-2 border-y border-gold/50 px-10 py-5">
+        <span className="text-[10px] uppercase tracking-[0.4em] text-foreground/60">Horário</span>
+        <span className="font-serif-display text-5xl md:text-6xl leading-none text-fuchsia tabular-nums">
+          {time}
+        </span>
+      </div>
+
+      {alert && (
+        <div className="mt-7 flex items-start gap-3 border border-fuchsia/35 bg-blush/40 px-6 py-5 text-left">
+          <Clock size={16} className="mt-0.5 shrink-0 text-fuchsia" />
+          <p className="font-serif-display text-lg md:text-xl leading-snug text-ink">{alert}</p>
+        </div>
+      )}
+
+      <div className="mx-auto my-7 h-px w-24 gold-rule" />
+      <p className="uppercase tracking-[0.3em] text-xs text-foreground/80">{place}</p>
+      <p className="mt-3 text-sm text-foreground/75 leading-relaxed whitespace-pre-line">{address}</p>
+      <p className="mt-5 text-xs italic text-foreground/70">{note}</p>
       <a
         href={mapsUrl}
         target="_blank"
         rel="noreferrer"
-        className="inline-block mt-8 border border-foreground/80 px-8 py-3 text-[11px] uppercase tracking-[0.3em] hover:bg-foreground hover:text-background transition-colors"
+        className="inline-block mt-8 border border-ink px-8 py-3 text-[11px] uppercase tracking-[0.3em] hover:bg-ink hover:text-background transition-colors"
       >
         Como chegar
       </a>
@@ -360,10 +378,10 @@ function EventCard({
 
 function Cerimonia() {
   return (
-    <Section id="cerimonia" eyebrow="06 · Março · 2027" title="A Cerimônia">
+    <Section id="cerimonia" eyebrow="06 · Março · 2027" title="A Cerimônia" className="surface-romantic">
       <motion.div
         {...fadeUp}
-        className="relative overflow-hidden mb-12 shadow-[0_30px_80px_-40px_rgba(0,0,0,0.35)] rounded-sm max-w-5xl mx-auto bg-black/5"
+        className="relative overflow-hidden mb-12 shadow-[0_30px_80px_-40px_rgba(0,0,0,0.4)] rounded-sm max-w-5xl mx-auto bg-black/5 ring-1 ring-gold/40"
       >
         <img
           src={ceremonyImg}
@@ -371,7 +389,7 @@ function Cerimonia() {
           loading="lazy"
           className="w-full h-auto object-contain object-center"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-black/10 pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-black/10 pointer-events-none" />
         <div className="absolute inset-0 ring-1 ring-inset ring-white/20 pointer-events-none" />
       </motion.div>
       <div className="max-w-2xl mx-auto">
@@ -379,16 +397,18 @@ function Cerimonia() {
           icon={Church}
           eyebrow="Celebração religiosa"
           title="Igreja Santa Cecília"
-          time="19h00"
+          time="18:30"
+          alert="Pedimos, por favor, que não se atrasem. A celebração terá início pontualmente às 18:30."
           place="Igreja Santa Cecília"
           address={"Av. Jorge Tibiriçá, 364 — Centro\nCruzeiro · SP · 12701-020"}
           mapsUrl="https://www.google.com/maps/search/?api=1&query=Igreja+Santa+Cec%C3%ADlia+Av.+Jorge+Tibiri%C3%A7%C3%A1+364+Cruzeiro+SP"
-          note="Pedimos a gentileza de chegar 30 minutos antes. Traje: passeio completo."
+          note="Traje: passeio completo."
         />
       </div>
     </Section>
   );
 }
+
 
 function Recepcao() {
   return (
