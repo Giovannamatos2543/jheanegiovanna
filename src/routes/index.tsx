@@ -412,7 +412,7 @@ function Cerimonia() {
 
 function Recepcao() {
   return (
-    <Section id="recepcao" eyebrow="Logo após a cerimônia" title="A Recepção" className="bg-offwhite">
+    <Section id="recepcao" eyebrow="Logo após a cerimônia" title="A Recepção" className="surface-warm">
       <div className="max-w-2xl mx-auto">
         <EventCard
           icon={Wine}
