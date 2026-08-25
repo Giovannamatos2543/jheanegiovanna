@@ -882,15 +882,14 @@ function Index() {
       <Navbar />
       <main>
         <Hero />
-        <Historia />
         <Galeria />
         <Cerimonia />
         <Recepcao />
         <DressCode />
         <Presentes />
         <RSVP />
-        <Playlist />
         <Final />
+
       </main>
       <Footer />
     </div>
