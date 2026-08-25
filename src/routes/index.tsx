@@ -290,7 +290,7 @@ function Galeria() {
     { src: gallery1, span: "md:col-span-2 aspect-[16/9]", alt: "Casal sorrindo" },
   ];
   return (
-    <Section id="galeria" eyebrow="Momentos" title="Galeria" className="bg-offwhite">
+    <Section id="galeria" eyebrow="Momentos" title="Galeria" className="surface-warm">
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 auto-rows-[200px] md:auto-rows-[220px]">
         {photos.map((p, i) => (
           <motion.div
