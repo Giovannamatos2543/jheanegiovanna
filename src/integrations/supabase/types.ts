@@ -14,16 +14,240 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      families: {
+        Row: {
+          access_code: string
+          created_at: string
+          id: string
+          name: string
+          surname: string
+        }
+        Insert: {
+          access_code: string
+          created_at?: string
+          id?: string
+          name: string
+          surname: string
+        }
+        Update: {
+          access_code?: string
+          created_at?: string
+          id?: string
+          name?: string
+          surname?: string
+        }
+        Relationships: []
+      }
+      gift_claims: {
+        Row: {
+          amount_cents: number | null
+          confirmed_at: string | null
+          created_at: string
+          family_id: string | null
+          gift_id: string
+          guest_id: string | null
+          guest_label: string | null
+          id: string
+          method: string
+          note: string | null
+          status: string
+        }
+        Insert: {
+          amount_cents?: number | null
+          confirmed_at?: string | null
+          created_at?: string
+          family_id?: string | null
+          gift_id: string
+          guest_id?: string | null
+          guest_label?: string | null
+          id?: string
+          method?: string
+          note?: string | null
+          status?: string
+        }
+        Update: {
+          amount_cents?: number | null
+          confirmed_at?: string | null
+          created_at?: string
+          family_id?: string | null
+          gift_id?: string
+          guest_id?: string | null
+          guest_label?: string | null
+          id?: string
+          method?: string
+          note?: string | null
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "gift_claims_family_id_fkey"
+            columns: ["family_id"]
+            isOneToOne: false
+            referencedRelation: "families"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "gift_claims_gift_id_fkey"
+            columns: ["gift_id"]
+            isOneToOne: false
+            referencedRelation: "gifts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "gift_claims_guest_id_fkey"
+            columns: ["guest_id"]
+            isOneToOne: false
+            referencedRelation: "guests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      gifts: {
+        Row: {
+          active: boolean
+          category: string
+          created_at: string
+          description: string | null
+          id: string
+          image_url: string | null
+          name: string
+          sort_order: number
+          value_cents: number | null
+          value_label: string | null
+        }
+        Insert: {
+          active?: boolean
+          category: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          image_url?: string | null
+          name: string
+          sort_order?: number
+          value_cents?: number | null
+          value_label?: string | null
+        }
+        Update: {
+          active?: boolean
+          category?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          image_url?: string | null
+          name?: string
+          sort_order?: number
+          value_cents?: number | null
+          value_label?: string | null
+        }
+        Relationships: []
+      }
+      guests: {
+        Row: {
+          created_at: string
+          family_id: string
+          id: string
+          is_child: boolean
+          name: string
+          responded_at: string | null
+          rsvp_status: string
+          sort_order: number
+        }
+        Insert: {
+          created_at?: string
+          family_id: string
+          id?: string
+          is_child?: boolean
+          name: string
+          responded_at?: string | null
+          rsvp_status?: string
+          sort_order?: number
+        }
+        Update: {
+          created_at?: string
+          family_id?: string
+          id?: string
+          is_child?: boolean
+          name?: string
+          responded_at?: string | null
+          rsvp_status?: string
+          sort_order?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "guests_family_id_fkey"
+            columns: ["family_id"]
+            isOneToOne: false
+            referencedRelation: "families"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      notifications: {
+        Row: {
+          body: string
+          created_at: string
+          id: string
+          kind: string
+          payload: Json
+          read_at: string | null
+          title: string
+        }
+        Insert: {
+          body: string
+          created_at?: string
+          id?: string
+          kind: string
+          payload?: Json
+          read_at?: string | null
+          title: string
+        }
+        Update: {
+          body?: string
+          created_at?: string
+          id?: string
+          kind?: string
+          payload?: Json
+          read_at?: string | null
+          title?: string
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "user"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +374,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "user"],
+    },
   },
 } as const
