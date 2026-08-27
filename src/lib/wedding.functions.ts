@@ -15,8 +15,8 @@ const codeSchema = z
   .transform((v) => v.toUpperCase());
 
 export const getGifts = createServerFn({ method: "GET" }).handler(async () => {
-  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-  const { data, error } = await supabaseAdmin
+  const { getPublicClient } = await import("./wedding.server");
+  const { data, error } = await getPublicClient()
     .from("gifts")
     .select("id, name, description, value_label, value_cents, category, image_url, sort_order")
     .eq("active", true)
@@ -24,6 +24,7 @@ export const getGifts = createServerFn({ method: "GET" }).handler(async () => {
   if (error) throw new Error(error.message);
   return data ?? [];
 });
+
 
 export const getFamilyByCode = createServerFn({ method: "POST" })
   .inputValidator(z.object({ code: codeSchema }))
