@@ -167,18 +167,10 @@ export const registerGiftChoice = createServerFn({ method: "POST" })
 
 // ---------- Administração ----------
 
-async function assertAdmin(context: { supabase: { rpc: Function }; userId: string }) {
-  const { data, error } = await context.supabase.rpc("has_role", {
-    _user_id: context.userId,
-    _role: "admin",
-  });
-  if (error) throw new Error(error.message);
-  if (!data) throw new Error("Acesso restrito ao administrador.");
-}
-
 export const adminOverview = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
+    const { assertAdmin } = await import("./wedding.server");
     await assertAdmin(context as never);
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
@@ -218,6 +210,7 @@ export const adminSetClaimStatus = createServerFn({ method: "POST" })
     }),
   )
   .handler(async ({ data, context }) => {
+    const { assertAdmin } = await import("./wedding.server");
     await assertAdmin(context as never);
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { error } = await supabaseAdmin
@@ -234,6 +227,7 @@ export const adminSetClaimStatus = createServerFn({ method: "POST" })
 export const adminMarkNotificationsRead = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
+    const { assertAdmin } = await import("./wedding.server");
     await assertAdmin(context as never);
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { error } = await supabaseAdmin
