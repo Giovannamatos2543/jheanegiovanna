@@ -1,5 +1,6 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import { motion } from "motion/react";
 import {
   Heart,
@@ -10,8 +11,6 @@ import {
   X,
   Church,
   Wine,
-  ChevronLeft,
-  Check,
   Utensils,
   Plane,
   Home as HomeIcon,
@@ -22,15 +21,20 @@ import {
   Wallet,
   Gem,
   Clock,
+  Copy,
+  Loader2,
+  Lock,
 } from "lucide-react";
+import { toast } from "sonner";
 
-
+import { getGifts, registerGiftChoice } from "@/lib/wedding.functions";
 import heroCouple from "@/assets/hero-couple.jpg";
 import gallery1 from "@/assets/gallery-1.jpg";
 import gallery2 from "@/assets/gallery-2.jpg";
 import gallery3 from "@/assets/gallery-3.jpg";
 import gallery4 from "@/assets/gallery-4.jpg";
 import ceremonyImg from "@/assets/ceremony-church.jpg";
+
 
 export const Route = createFileRoute("/")({
   head: () => ({
