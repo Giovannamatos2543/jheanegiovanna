@@ -626,14 +626,99 @@ function DressCode() {
   );
 }
 
+const PIX_KEY = "468.378.788-16";
+const PIX_OWNER = "Jhean Victor Cipriano Silva";
+
+function PixArea() {
+  const [revealed, setRevealed] = useState(false);
+
+  async function copy() {
+    try {
+      await navigator.clipboard.writeText(PIX_KEY);
+      toast.success("Chave Pix copiada! 💕");
+    } catch {
+      setRevealed(true);
+      toast.error("Não foi possível copiar. A chave foi exibida abaixo.");
+    }
+  }
+
+  return (
+    <motion.div {...fadeUp} className="card-elegant mx-auto mb-14 max-w-3xl p-8 md:p-12 text-center">
+      <Wallet className="mx-auto text-fuchsia" size={24} />
+      <h3 className="font-serif-display mt-5 text-2xl md:text-3xl">Presentear com Pix</h3>
+      <div className="mx-auto my-5 h-px w-16 bg-gold/60" />
+      <p className="mx-auto max-w-lg text-sm leading-relaxed text-foreground/75">
+        Se preferir, você pode nos presentear com um Pix — com qualquer valor, do coração. A chave
+        está protegida: clique no botão abaixo para copiá-la com segurança.
+      </p>
+      <div className="mt-8 flex flex-col items-center gap-3">
+        <button
+          onClick={copy}
+          className="inline-flex items-center gap-3 border border-ink px-8 py-4 text-[11px] uppercase tracking-[0.35em] transition-colors hover:bg-ink hover:text-background"
+        >
+          <Copy size={13} /> Copiar chave Pix
+        </button>
+        <p className="text-[10px] uppercase tracking-[0.25em] text-foreground/55">
+          Titular: {PIX_OWNER}
+        </p>
+        {revealed ? (
+          <p className="font-serif-display text-lg">CPF: {PIX_KEY}</p>
+        ) : (
+          <button
+            onClick={() => setRevealed(true)}
+            className="text-[10px] uppercase tracking-[0.25em] text-foreground/50 hover:text-foreground"
+          >
+            Ver chave (CPF)
+          </button>
+        )}
+      </div>
+      <p className="mt-6 text-xs italic text-foreground/55">
+        Após o envio, escolha o presente correspondente abaixo para que possamos agradecer com
+        carinho.
+      </p>
+    </motion.div>
+  );
+}
+
 function Presentes() {
   const [active, setActive] = useState("todos");
+  const [chosen, setChosen] = useState<{ id: string; name: string } | null>(null);
+  const [label, setLabel] = useState("");
+  const [code, setCode] = useState("");
+
+  const { data: gifts = [], isPending } = useQuery({
+    queryKey: ["gifts"],
+    queryFn: () => getGifts(),
+  });
+
+  const register = useMutation({
+    mutationFn: () =>
+      registerGiftChoice({
+        data: {
+          giftId: chosen!.id,
+          method: "pix",
+          ...(label.trim() ? { guestLabel: label.trim() } : {}),
+          ...(code.trim().length >= 4 ? { code: code.trim() } : {}),
+        },
+      }),
+    onSuccess: () => {
+      toast.success("Presente registrado! Obrigado de coração 💕");
+      setChosen(null);
+      setLabel("");
+      setCode("");
+    },
+    onError: () => toast.error("Não foi possível registrar o presente agora."),
+  });
+
   const filtered = useMemo(
-    () => (active === "todos" ? GIFTS : GIFTS.filter((g) => g.category === active)),
-    [active],
+    () => (active === "todos" ? gifts : gifts.filter((g) => g.category === active)),
+    [active, gifts],
   );
+
   return (
     <Section id="presentes" eyebrow="Com carinho" title="Lista de Presentes" className="surface-warm">
+      <PixArea />
+
       <motion.div {...fadeUp} className="flex flex-wrap justify-center gap-2 md:gap-3 mb-14">
         {GIFT_CATEGORIES.map((c) => {
           const Icon = c.icon;
@@ -655,42 +740,111 @@ function Presentes() {
         })}
       </motion.div>
 
+      {isPending && (
+        <p className="flex items-center justify-center gap-2 text-sm text-foreground/60">
+          <Loader2 size={14} className="animate-spin" /> Carregando presentes…
+        </p>
+      )}
+
       <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
         {filtered.map((g, i) => (
           <motion.article
-            key={g.name + i}
+            key={g.id}
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-50px" }}
             transition={{ duration: 0.7, delay: (i % 6) * 0.06, ease: [0.22, 1, 0.36, 1] }}
             className="group bg-card border border-border overflow-hidden flex flex-col hover:border-fuchsia/40 transition-colors shadow-[0_20px_60px_-50px_rgba(0,0,0,0.35)]"
           >
-            <div className="relative aspect-[4/3] overflow-hidden bg-offwhite">
-              <img
-                src={g.image}
-                alt={g.name}
-                loading="lazy"
-                className="h-full w-full object-cover transition-transform duration-[1400ms] group-hover:scale-105"
-              />
-              <div className="absolute top-3 left-3 bg-background/90 backdrop-blur px-3 py-1 text-[9px] uppercase tracking-[0.25em] text-foreground/70">
-                {GIFT_CATEGORIES.find((c) => c.id === g.category)?.label}
+            {g.image_url ? (
+              <div className="relative aspect-[4/3] overflow-hidden bg-offwhite">
+                <img
+                  src={g.image_url}
+                  alt={g.name}
+                  loading="lazy"
+                  className="h-full w-full object-cover transition-transform duration-[1400ms] group-hover:scale-105"
+                />
+                <div className="absolute top-3 left-3 bg-background/90 backdrop-blur px-3 py-1 text-[9px] uppercase tracking-[0.25em] text-foreground/70">
+                  {GIFT_CATEGORIES.find((c) => c.id === g.category)?.label ?? g.category}
+                </div>
               </div>
-            </div>
+            ) : (
+              <div className="relative flex aspect-[4/3] items-center justify-center bg-offwhite">
+                <Gift size={26} className="text-gold" />
+                <div className="absolute top-3 left-3 bg-background/90 px-3 py-1 text-[9px] uppercase tracking-[0.25em] text-foreground/70">
+                  {GIFT_CATEGORIES.find((c) => c.id === g.category)?.label ?? g.category}
+                </div>
+              </div>
+            )}
             <div className="p-7 text-center flex-1 flex flex-col">
               <h3 className="font-serif-display text-xl">{g.name}</h3>
               <div className="mx-auto my-4 h-px w-10 bg-gold/60" />
-              <p className="text-sm text-foreground/70 leading-relaxed flex-1">{g.desc}</p>
-              <p className="mt-5 font-serif-display text-2xl text-foreground">{g.value}</p>
-              <button className="mt-6 w-full border border-foreground/80 py-3 text-[10px] uppercase tracking-[0.3em] hover:bg-foreground hover:text-background transition-colors">
-                {g.cta ?? "Presentear"}
+              {g.description && (
+                <p className="text-sm text-foreground/70 leading-relaxed flex-1">{g.description}</p>
+              )}
+              {g.value_label && (
+                <p className="mt-5 font-serif-display text-2xl text-foreground">{g.value_label}</p>
+              )}
+              <button
+                onClick={() => setChosen({ id: g.id, name: g.name })}
+                className="mt-6 w-full border border-foreground/80 py-3 text-[10px] uppercase tracking-[0.3em] hover:bg-foreground hover:text-background transition-colors"
+              >
+                Presentear
               </button>
             </div>
           </motion.article>
         ))}
       </div>
+
+      {chosen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-ink/60 px-5 py-10 backdrop-blur-sm">
+          <div className="card-elegant w-full max-w-md bg-background p-7 md:p-10">
+            <div className="flex items-start justify-between gap-4">
+              <h3 className="font-serif-display text-2xl">{chosen.name}</h3>
+              <button onClick={() => setChosen(null)} aria-label="Fechar">
+                <X size={18} className="text-foreground/60" />
+              </button>
+            </div>
+            <div className="my-5 h-px w-14 bg-gold/60" />
+            <p className="text-sm leading-relaxed text-foreground/75">
+              Faça o Pix usando a chave copiada e registre abaixo para sabermos de quem veio esse
+              carinho. O recebimento é confirmado manualmente pelos noivos.
+            </p>
+            <label className="mt-6 block text-[10px] uppercase tracking-[0.3em] text-foreground/60">
+              Seu nome
+            </label>
+            <input
+              value={label}
+              onChange={(e) => setLabel(e.target.value)}
+              maxLength={120}
+              className="mt-2 w-full border border-border bg-background px-4 py-3 text-sm outline-none focus:border-fuchsia"
+            />
+            <label className="mt-5 block text-[10px] uppercase tracking-[0.3em] text-foreground/60">
+              Código do convite (opcional)
+            </label>
+            <input
+              value={code}
+              onChange={(e) => setCode(e.target.value.toUpperCase())}
+              className="mt-2 w-full border border-border bg-background px-4 py-3 text-sm tracking-[0.15em] outline-none focus:border-fuchsia"
+            />
+            <button
+              onClick={() => register.mutate()}
+              disabled={register.isPending || (!label.trim() && code.trim().length < 4)}
+              className="mt-8 flex w-full items-center justify-center gap-2 border border-ink py-4 text-[11px] uppercase tracking-[0.35em] transition-colors hover:bg-ink hover:text-background disabled:opacity-40"
+            >
+              {register.isPending && <Loader2 size={14} className="animate-spin" />} Registrar
+              presente
+            </button>
+            <p className="mt-4 text-center text-[10px] uppercase tracking-[0.2em] text-foreground/50">
+              Status inicial: pagamento aguardando confirmação
+            </p>
+          </div>
+        </div>
+      )}
     </Section>
   );
 }
+
 
 function RSVP() {
   return (
