@@ -711,6 +711,8 @@ function RSVP() {
         </p>
         <Link
           to="/convite"
+          search={{ codigo: undefined }}
+
           className="mt-10 inline-flex items-center justify-center gap-3 border border-ink px-10 py-4 text-[11px] uppercase tracking-[0.4em] transition-colors hover:bg-ink hover:text-background"
         >
           <Heart size={13} className="text-fuchsia" fill="currentColor" /> Acessar meu convite
