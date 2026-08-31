@@ -692,157 +692,37 @@ function Presentes() {
   );
 }
 
-type Family = { id: string; name: string; members: string[] };
-
-const FAMILIES: Family[] = [
-  { id: "silva", name: "Família Silva", members: ["Carlos Silva", "Marta Silva", "Pedro Silva", "Ana Silva"] },
-  { id: "oliveira", name: "Família Oliveira", members: ["Roberto Oliveira", "Helena Oliveira", "Lucas Oliveira"] },
-  { id: "santos", name: "Família Santos", members: ["José Santos", "Maria Santos", "Beatriz Santos", "Rafael Santos"] },
-  { id: "almeida", name: "Família Almeida", members: ["Eduardo Almeida", "Camila Almeida"] },
-  { id: "ferreira", name: "Família Ferreira", members: ["Marcelo Ferreira", "Patrícia Ferreira", "Júlia Ferreira"] },
-  { id: "costa", name: "Família Costa", members: ["André Costa", "Renata Costa", "Sofia Costa", "Miguel Costa"] },
-];
-
 function RSVP() {
-  const [step, setStep] = useState<"familia" | "membros" | "sucesso">("familia");
-  const [familyId, setFamilyId] = useState<string | null>(null);
-  const [selected, setSelected] = useState<string[]>([]);
-  const [message, setMessage] = useState("");
-
-  const family = FAMILIES.find((f) => f.id === familyId) ?? null;
-
-  function reset() {
-    setStep("familia");
-    setFamilyId(null);
-    setSelected([]);
-    setMessage("");
-  }
-
   return (
     <Section id="rsvp" eyebrow="Confirme sua presença" title="RSVP" className="surface-romantic">
-      <motion.div
-        {...fadeUp}
-        className="card-elegant mx-auto max-w-2xl p-8 md:p-14"
-      >
-
-        {step === "familia" && (
-          <div>
-            <p className="text-center text-sm text-foreground/70 mb-10 leading-relaxed">
-              Para manter este momento íntimo, selecione abaixo a <em className="font-serif-display not-italic">sua família</em> para acessarmos sua lista privada de convidados.
-            </p>
-            <div className="grid sm:grid-cols-2 gap-3">
-              {FAMILIES.map((f) => (
-                <button
-                  key={f.id}
-                  onClick={() => {
-                    setFamilyId(f.id);
-                    setSelected([]);
-                    setStep("membros");
-                  }}
-                  className="group text-left border border-border bg-background hover:border-fuchsia/60 hover:bg-offwhite transition-all p-5"
-                >
-                  <p className="font-serif-display text-lg">{f.name}</p>
-                  <p className="mt-1 text-[10px] uppercase tracking-[0.25em] text-foreground/50">
-                    {f.members.length} convidado{f.members.length > 1 ? "s" : ""}
-                  </p>
-                </button>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {step === "membros" && family && (
-          <div>
-            <button
-              onClick={() => setStep("familia")}
-              className="inline-flex items-center gap-2 text-[10px] uppercase tracking-[0.3em] text-foreground/60 hover:text-foreground transition-colors mb-8"
-            >
-              <ChevronLeft size={12} /> Trocar família
-            </button>
-            <h3 className="font-serif-display text-2xl text-center">{family.name}</h3>
-            <Ornament className="my-6" />
-            <p className="text-center text-sm text-foreground/70 mb-8">
-              Selecione quem irá comparecer:
-            </p>
-            <ul className="space-y-2 mb-8">
-              {family.members.map((m) => {
-                const on = selected.includes(m);
-                return (
-                  <li key={m}>
-                    <label
-                      className={`flex items-center justify-between gap-4 px-5 py-4 border cursor-pointer transition-all ${
-                        on ? "border-foreground bg-offwhite" : "border-border hover:border-foreground/40"
-                      }`}
-                    >
-                      <span className="font-serif-display text-lg">{m}</span>
-                      <span
-                        className={`flex items-center justify-center w-6 h-6 border ${
-                          on ? "border-foreground bg-foreground text-background" : "border-border"
-                        }`}
-                      >
-                        {on && <Check size={14} />}
-                      </span>
-                      <input
-                        type="checkbox"
-                        className="sr-only"
-                        checked={on}
-                        onChange={(e) =>
-                          setSelected((s) => (e.target.checked ? [...s, m] : s.filter((x) => x !== m)))
-                        }
-                      />
-                    </label>
-                  </li>
-                );
-              })}
-            </ul>
-            <div>
-              <label className="block text-[10px] uppercase tracking-[0.3em] text-foreground/60 mb-3">
-                Recado para os noivos (opcional)
-              </label>
-              <textarea
-                rows={3}
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-                className="w-full border border-border bg-background p-4 outline-none focus:border-fuchsia transition-colors resize-none text-sm"
-              />
-            </div>
-            <button
-              disabled={selected.length === 0}
-              onClick={() => setStep("sucesso")}
-              className="mt-8 w-full border border-foreground py-4 text-[11px] uppercase tracking-[0.4em] hover:bg-foreground hover:text-background transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
-            >
-              Confirmar presença
-            </button>
-          </div>
-        )}
-
-        {step === "sucesso" && family && (
-          <div className="text-center py-6">
-            <Heart className="mx-auto text-fuchsia" size={28} fill="currentColor" />
-            <p className="font-serif-display text-3xl md:text-4xl mt-6">Com todo carinho, obrigado!</p>
-            <Ornament className="my-8" />
-            <p className="text-foreground/70 leading-relaxed max-w-md mx-auto">
-              A presença de <span className="font-serif-display italic">{family.name}</span> foi confirmada com {selected.length} convidado{selected.length > 1 ? "s" : ""}. Mal podemos esperar para celebrar esse dia ao seu lado.
-            </p>
-            <ul className="mt-6 inline-flex flex-wrap justify-center gap-2">
-              {selected.map((m) => (
-                <li key={m} className="text-[10px] uppercase tracking-[0.25em] border border-border px-3 py-1.5 bg-offwhite">
-                  {m}
-                </li>
-              ))}
-            </ul>
-            <button
-              onClick={reset}
-              className="mt-10 text-[10px] uppercase tracking-[0.3em] text-foreground/60 hover:text-foreground transition-colors"
-            >
-              Confirmar outra família
-            </button>
-          </div>
-        )}
+      <motion.div {...fadeUp} className="card-elegant mx-auto max-w-2xl p-8 md:p-14 text-center">
+        <div className="flex items-center justify-center gap-2 text-foreground/70">
+          <Lock size={14} className="text-gold" />
+          <span className="text-[10px] uppercase tracking-[0.3em]">Convite privado</span>
+        </div>
+        <h3 className="font-serif-display mt-6 text-3xl md:text-4xl">
+          Cada família tem seu acesso
+        </h3>
+        <Ornament className="my-7" />
+        <p className="mx-auto max-w-md text-foreground/80 leading-relaxed">
+          A confirmação de presença é individual e privada. Use o{" "}
+          <em className="font-serif-display not-italic">código do seu convite</em> para acessar
+          apenas os integrantes da sua família e confirmar (ou recusar) a presença de cada um.
+        </p>
+        <Link
+          to="/convite"
+          className="mt-10 inline-flex items-center justify-center gap-3 border border-ink px-10 py-4 text-[11px] uppercase tracking-[0.4em] transition-colors hover:bg-ink hover:text-background"
+        >
+          <Heart size={13} className="text-fuchsia" fill="currentColor" /> Acessar meu convite
+        </Link>
+        <p className="mt-6 text-xs italic text-foreground/60">
+          Não encontrou seu código? Fale com os noivos.
+        </p>
       </motion.div>
     </Section>
   );
 }
+
 
 
 
