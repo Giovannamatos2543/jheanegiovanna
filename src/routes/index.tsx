@@ -860,7 +860,7 @@ function Final() {
         </p>
         <p className="font-script text-5xl md:text-6xl mt-12 text-gold">Jhean &amp; Giovanna</p>
         <p className="mt-6 text-[10px] uppercase tracking-[0.5em] text-background/60">
-          14 · 03 · 2026
+          06 · 03 · 2027
         </p>
       </motion.div>
     </section>
