@@ -25,7 +25,6 @@ export const getGifts = createServerFn({ method: "GET" }).handler(async () => {
   return data ?? [];
 });
 
-
 export const getFamilyByCode = createServerFn({ method: "POST" })
   .inputValidator(z.object({ code: codeSchema }))
   .handler(async ({ data }) => {
@@ -33,7 +32,7 @@ export const getFamilyByCode = createServerFn({ method: "POST" })
     const { data: family, error } = await supabaseAdmin
       .from("families")
       .select("id, name, surname")
-      .eq("access_code", data.code)
+      .ilike("access_code", data.code)
       .maybeSingle();
     if (error) throw new Error(error.message);
     if (!family) return { found: false as const };
@@ -62,10 +61,11 @@ export const setGuestRsvp = createServerFn({ method: "POST" })
   )
   .handler(async ({ data }) => {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { sendAdminEmail } = await import("./wedding.server");
     const { data: family } = await supabaseAdmin
       .from("families")
-      .select("id, name")
-      .eq("access_code", data.code)
+      .select("id, name, surname")
+      .ilike("access_code", data.code)
       .maybeSingle();
     if (!family) throw new Error("Código de convite inválido.");
 
@@ -80,19 +80,28 @@ export const setGuestRsvp = createServerFn({ method: "POST" })
     if (error) throw new Error(error.message);
     if (!guest) throw new Error("Convidado não encontrado nesta família.");
 
+    const answer =
+      guest.rsvp_status === "confirmed" ? "Confirmou presença" : "Não poderá comparecer";
+
     await supabaseAdmin.from("notifications").insert({
       kind: "rsvp",
-      title: "Nova confirmação de presença! 💍",
-      body: `${family.name} — ${guest.name}: ${
-        guest.rsvp_status === "confirmed" ? "Confirmou presença" : "Não poderá comparecer"
-      }`,
+      title: "Nova confirmação de presença 💍",
+      body: `${family.name} — ${guest.name}: ${answer}`,
       payload: {
         family: family.name,
+        surname: family.surname,
         guest: guest.name,
         status: guest.rsvp_status,
         responded_at: guest.responded_at,
       },
     });
+
+    await sendAdminEmail("Nova confirmação de presença 💍", [
+      `Família: ${family.name}`,
+      `Convidado: ${guest.name}`,
+      `Resposta: ${answer}`,
+      `Data e horário: ${new Date(guest.responded_at ?? Date.now()).toLocaleString("pt-BR")}`,
+    ]);
 
     return { guest };
   });
@@ -108,6 +117,7 @@ export const registerGiftChoice = createServerFn({ method: "POST" })
   )
   .handler(async ({ data }) => {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { sendAdminEmail } = await import("./wedding.server");
 
     const { data: gift } = await supabaseAdmin
       .from("gifts")
@@ -123,7 +133,7 @@ export const registerGiftChoice = createServerFn({ method: "POST" })
       const { data: family } = await supabaseAdmin
         .from("families")
         .select("id, name")
-        .eq("access_code", data.code)
+        .ilike("access_code", data.code)
         .maybeSingle();
       if (family) {
         familyId = family.id;
@@ -145,10 +155,12 @@ export const registerGiftChoice = createServerFn({ method: "POST" })
       .single();
     if (error) throw new Error(error.message);
 
+    const who = familyName ?? data.guestLabel ?? "Convidado não identificado";
+
     await supabaseAdmin.from("notifications").insert({
       kind: "gift",
-      title: "Novo presente recebido! 🎁",
-      body: `${familyName ?? data.guestLabel ?? "Convidado não identificado"} escolheu "${gift.name}" (${
+      title: "Novo presente! 🎁",
+      body: `${who} escolheu "${gift.name}" (${
         gift.value_label ?? "valor livre"
       }) — Pagamento aguardando confirmação`,
       payload: {
@@ -162,10 +174,46 @@ export const registerGiftChoice = createServerFn({ method: "POST" })
       },
     });
 
+    await sendAdminEmail("Novo presente! 🎁", [
+      `Família / convidado: ${who}`,
+      `Presente: ${gift.name}`,
+      `Valor: ${gift.value_label ?? "valor livre"}`,
+      `Forma: ${data.method === "pix" ? "Pix" : "Loja"}`,
+      `Status do pagamento: Aguardando confirmação`,
+      `Data e horário: ${new Date(claim.created_at).toLocaleString("pt-BR")}`,
+    ]);
+
     return { claimId: claim.id, status: claim.status };
   });
 
 // ---------- Administração ----------
+
+/**
+ * Bootstrap seguro: a PRIMEIRA conta autenticada pode se tornar administradora.
+ * Depois que existir um admin, esta função sempre recusa novos pedidos.
+ */
+export const claimAdminAccess = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { data: exists, error } = await supabaseAdmin.rpc("admin_exists");
+    if (error) throw new Error(error.message);
+    if (exists) {
+      const { data: mine } = await supabaseAdmin
+        .from("user_roles")
+        .select("id")
+        .eq("user_id", context.userId)
+        .eq("role", "admin")
+        .maybeSingle();
+      if (mine) return { granted: true as const, alreadyAdmin: true as const };
+      throw new Error("Já existe um administrador. Peça acesso ao administrador atual.");
+    }
+    const { error: insErr } = await supabaseAdmin
+      .from("user_roles")
+      .insert({ user_id: context.userId, role: "admin" });
+    if (insErr) throw new Error(insErr.message);
+    return { granted: true as const, alreadyAdmin: false as const };
+  });
 
 export const adminOverview = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
@@ -175,10 +223,10 @@ export const adminOverview = createServerFn({ method: "GET" })
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
     const [families, guests, claims, notifications] = await Promise.all([
-      supabaseAdmin.from("families").select("id, name, surname, access_code").order("name"),
+      supabaseAdmin.from("families").select("id, name, surname, access_code, created_at").order("name"),
       supabaseAdmin
         .from("guests")
-        .select("id, family_id, name, rsvp_status, responded_at, sort_order")
+        .select("id, family_id, name, is_child, rsvp_status, responded_at, sort_order")
         .order("sort_order"),
       supabaseAdmin
         .from("gift_claims")
@@ -190,7 +238,7 @@ export const adminOverview = createServerFn({ method: "GET" })
         .from("notifications")
         .select("id, kind, title, body, created_at, read_at")
         .order("created_at", { ascending: false })
-        .limit(100),
+        .limit(200),
     ]);
 
     return {
@@ -199,6 +247,152 @@ export const adminOverview = createServerFn({ method: "GET" })
       claims: claims.data ?? [],
       notifications: notifications.data ?? [],
     };
+  });
+
+const memberSchema = z.object({
+  id: z.string().uuid().optional(),
+  name: z.string().trim().min(1).max(120),
+  isChild: z.boolean().default(false),
+});
+
+export const adminCreateFamily = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator(
+    z.object({
+      name: z.string().trim().min(1).max(120),
+      surname: z.string().trim().min(1).max(120),
+      members: z.array(memberSchema).min(1).max(30),
+    }),
+  )
+  .handler(async ({ data, context }) => {
+    const { assertAdmin, generateInviteCode } = await import("./wedding.server");
+    await assertAdmin(context as never);
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+
+    let created: { id: string; access_code: string } | null = null;
+    for (let attempt = 0; attempt < 6 && !created; attempt++) {
+      const code = generateInviteCode();
+      const { data: fam, error } = await supabaseAdmin
+        .from("families")
+        .insert({ name: data.name, surname: data.surname, access_code: code })
+        .select("id, access_code")
+        .maybeSingle();
+      if (error) {
+        if (error.code === "23505") continue; // código repetido: tenta outro
+        throw new Error(error.message);
+      }
+      created = fam;
+    }
+    if (!created) throw new Error("Não foi possível gerar um código único. Tente novamente.");
+
+    const { error: gErr } = await supabaseAdmin.from("guests").insert(
+      data.members.map((m, i) => ({
+        family_id: created!.id,
+        name: m.name,
+        is_child: m.isChild,
+        sort_order: i,
+        rsvp_status: "pending",
+      })),
+    );
+    if (gErr) throw new Error(gErr.message);
+
+    return { id: created.id, accessCode: created.access_code };
+  });
+
+export const adminUpdateFamily = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator(
+    z.object({
+      id: z.string().uuid(),
+      name: z.string().trim().min(1).max(120),
+      surname: z.string().trim().min(1).max(120),
+      members: z.array(memberSchema).min(1).max(30),
+    }),
+  )
+  .handler(async ({ data, context }) => {
+    const { assertAdmin } = await import("./wedding.server");
+    await assertAdmin(context as never);
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+
+    const { error: fErr } = await supabaseAdmin
+      .from("families")
+      .update({ name: data.name, surname: data.surname })
+      .eq("id", data.id);
+    if (fErr) throw new Error(fErr.message);
+
+    const { data: existing } = await supabaseAdmin
+      .from("guests")
+      .select("id")
+      .eq("family_id", data.id);
+    const keep = new Set(data.members.map((m) => m.id).filter(Boolean) as string[]);
+    const remove = (existing ?? []).map((g) => g.id).filter((id) => !keep.has(id));
+    if (remove.length) {
+      await supabaseAdmin.from("gift_claims").update({ guest_id: null }).in("guest_id", remove);
+      const { error } = await supabaseAdmin.from("guests").delete().in("id", remove);
+      if (error) throw new Error(error.message);
+    }
+
+    for (const [i, m] of data.members.entries()) {
+      if (m.id) {
+        const { error } = await supabaseAdmin
+          .from("guests")
+          .update({ name: m.name, is_child: m.isChild, sort_order: i })
+          .eq("id", m.id)
+          .eq("family_id", data.id);
+        if (error) throw new Error(error.message);
+      } else {
+        const { error } = await supabaseAdmin.from("guests").insert({
+          family_id: data.id,
+          name: m.name,
+          is_child: m.isChild,
+          sort_order: i,
+          rsvp_status: "pending",
+        });
+        if (error) throw new Error(error.message);
+      }
+    }
+
+    return { ok: true };
+  });
+
+export const adminDeleteFamily = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator(z.object({ id: z.string().uuid() }))
+  .handler(async ({ data, context }) => {
+    const { assertAdmin } = await import("./wedding.server");
+    await assertAdmin(context as never);
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+
+    await supabaseAdmin.from("gift_claims").update({ family_id: null }).eq("family_id", data.id);
+    await supabaseAdmin.from("guests").delete().eq("family_id", data.id);
+    const { error } = await supabaseAdmin.from("families").delete().eq("id", data.id);
+    if (error) throw new Error(error.message);
+    return { ok: true };
+  });
+
+export const adminRegenerateCode = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator(z.object({ id: z.string().uuid() }))
+  .handler(async ({ data, context }) => {
+    const { assertAdmin, generateInviteCode } = await import("./wedding.server");
+    await assertAdmin(context as never);
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+
+    for (let attempt = 0; attempt < 6; attempt++) {
+      const code = generateInviteCode();
+      const { data: fam, error } = await supabaseAdmin
+        .from("families")
+        .update({ access_code: code })
+        .eq("id", data.id)
+        .select("access_code")
+        .maybeSingle();
+      if (error) {
+        if (error.code === "23505") continue;
+        throw new Error(error.message);
+      }
+      if (fam) return { accessCode: fam.access_code };
+    }
+    throw new Error("Não foi possível gerar um novo código.");
   });
 
 export const adminSetClaimStatus = createServerFn({ method: "POST" })
@@ -226,14 +420,16 @@ export const adminSetClaimStatus = createServerFn({ method: "POST" })
 
 export const adminMarkNotificationsRead = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .handler(async ({ context }) => {
+  .inputValidator(z.object({ id: z.string().uuid().optional() }).optional())
+  .handler(async ({ data, context }) => {
     const { assertAdmin } = await import("./wedding.server");
     await assertAdmin(context as never);
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const { error } = await supabaseAdmin
-      .from("notifications")
-      .update({ read_at: new Date().toISOString() })
-      .is("read_at", null);
+    const now = new Date().toISOString();
+    const query = supabaseAdmin.from("notifications").update({ read_at: now });
+    const { error } = data?.id
+      ? await query.eq("id", data.id)
+      : await query.is("read_at", null);
     if (error) throw new Error(error.message);
     return { ok: true };
   });
