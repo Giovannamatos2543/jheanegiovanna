@@ -122,13 +122,21 @@ function AdminPage() {
   });
 
   const saveFamily = useMutation({
-    mutationFn: (v: { id?: string; name: string; surname: string; members: MemberDraft[] }) => {
+    mutationFn: async (v: {
+      id?: string;
+      name: string;
+      surname: string;
+      members: MemberDraft[];
+    }) => {
       const members = v.members
         .filter((m) => m.name.trim().length > 0)
         .map((m) => ({ ...(m.id ? { id: m.id } : {}), name: m.name.trim(), isChild: m.isChild }));
-      return v.id
-        ? adminUpdateFamily({ data: { id: v.id, name: v.name, surname: v.surname, members } })
-        : adminCreateFamily({ data: { name: v.name, surname: v.surname, members } });
+      if (v.id) {
+        await adminUpdateFamily({ data: { id: v.id, name: v.name, surname: v.surname, members } });
+        return { ok: true };
+      }
+      await adminCreateFamily({ data: { name: v.name, surname: v.surname, members } });
+      return { ok: true };
     },
     onSuccess: () => {
       toast.success("Família salva! 💕");
