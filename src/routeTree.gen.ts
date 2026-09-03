@@ -9,18 +9,13 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as ConviteRouteImport } from './routes/convite'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as ConviteCodigoRouteImport } from './routes/convite.$codigo'
+import { Route as ConviteIndexRouteImport } from './routes/convite/index'
+import { Route as ConviteCodigoRouteImport } from './routes/convite/$codigo'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 
-const ConviteRoute = ConviteRouteImport.update({
-  id: '/convite',
-  path: '/convite',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
   path: '/auth',
@@ -35,10 +30,15 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ConviteIndexRoute = ConviteIndexRouteImport.update({
+  id: '/convite/',
+  path: '/convite/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ConviteCodigoRoute = ConviteCodigoRouteImport.update({
-  id: '/$codigo',
-  path: '/$codigo',
-  getParentRoute: () => ConviteRoute,
+  id: '/convite/$codigo',
+  path: '/convite/$codigo',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
   id: '/admin',
@@ -49,57 +49,51 @@ const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
-  '/convite': typeof ConviteRouteWithChildren
   '/admin': typeof AuthenticatedAdminRoute
   '/convite/$codigo': typeof ConviteCodigoRoute
+  '/convite/': typeof ConviteIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
-  '/convite': typeof ConviteRouteWithChildren
   '/admin': typeof AuthenticatedAdminRoute
   '/convite/$codigo': typeof ConviteCodigoRoute
+  '/convite': typeof ConviteIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
-  '/convite': typeof ConviteRouteWithChildren
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
   '/convite/$codigo': typeof ConviteCodigoRoute
+  '/convite/': typeof ConviteIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/auth' | '/convite' | '/admin' | '/convite/$codigo'
+  fullPaths: '/' | '/auth' | '/admin' | '/convite/$codigo' | '/convite/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/convite' | '/admin' | '/convite/$codigo'
+  to: '/' | '/auth' | '/admin' | '/convite/$codigo' | '/convite'
   id:
     | '__root__'
     | '/'
     | '/_authenticated'
     | '/auth'
-    | '/convite'
     | '/_authenticated/admin'
     | '/convite/$codigo'
+    | '/convite/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
-  ConviteRoute: typeof ConviteRouteWithChildren
+  ConviteCodigoRoute: typeof ConviteCodigoRoute
+  ConviteIndexRoute: typeof ConviteIndexRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/convite': {
-      id: '/convite'
-      path: '/convite'
-      fullPath: '/convite'
-      preLoaderRoute: typeof ConviteRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/auth': {
       id: '/auth'
       path: '/auth'
@@ -121,12 +115,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/convite/': {
+      id: '/convite/'
+      path: '/convite'
+      fullPath: '/convite/'
+      preLoaderRoute: typeof ConviteIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/convite/$codigo': {
       id: '/convite/$codigo'
-      path: '/$codigo'
+      path: '/convite/$codigo'
       fullPath: '/convite/$codigo'
       preLoaderRoute: typeof ConviteCodigoRouteImport
-      parentRoute: typeof ConviteRoute
+      parentRoute: typeof rootRouteImport
     }
     '/_authenticated/admin': {
       id: '/_authenticated/admin'
@@ -149,22 +150,12 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
 const AuthenticatedRouteRouteWithChildren =
   AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
 
-interface ConviteRouteChildren {
-  ConviteCodigoRoute: typeof ConviteCodigoRoute
-}
-
-const ConviteRouteChildren: ConviteRouteChildren = {
-  ConviteCodigoRoute: ConviteCodigoRoute,
-}
-
-const ConviteRouteWithChildren =
-  ConviteRoute._addFileChildren(ConviteRouteChildren)
-
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
-  ConviteRoute: ConviteRouteWithChildren,
+  ConviteCodigoRoute: ConviteCodigoRoute,
+  ConviteIndexRoute: ConviteIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
