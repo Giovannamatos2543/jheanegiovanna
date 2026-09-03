@@ -29,11 +29,11 @@ export const Route = createFileRoute("/convite/")({
 
 function ConvitePage() {
   const { codigo } = Route.useSearch();
-  const navigate = useNavigate({ from: "/convite" });
+  const navigate = useNavigate({ from: "/convite/" });
   return (
     <InviteRsvp
       initialCode={codigo}
-      onCodeSubmit={(code) => navigate({ search: { codigo: code } })}
+      onCodeSubmit={(code) => navigate({ to: ".", search: { codigo: code } })}
     />
   );
 }
