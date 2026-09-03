@@ -2,7 +2,7 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 
 import { InviteRsvp } from "@/components/InviteRsvp";
 
-export const Route = createFileRoute("/convite")({
+export const Route = createFileRoute("/convite/")({
   validateSearch: (search: Record<string, unknown>) => ({
     codigo: typeof search["codigo"] === "string" ? (search["codigo"] as string) : undefined,
   }),
