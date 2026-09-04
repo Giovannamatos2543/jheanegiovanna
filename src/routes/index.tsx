@@ -655,6 +655,14 @@ function Presentes() {
         ))}
       </div>
 
+      <motion.div {...fadeUp} className="mx-auto mt-16 max-w-2xl text-center">
+        <Heart size={18} className="mx-auto text-fuchsia" />
+        <p className="mt-5 font-serif-display text-xl md:text-2xl leading-relaxed text-foreground/85">
+          Escolha seu presente, faça sua contribuição pelo Pix e pronto! Você acaba de participar
+          oficialmente da nossa vida de casados. 😂❤️
+        </p>
+      </motion.div>
+
       {chosen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-ink/60 px-5 py-10 backdrop-blur-sm">
           <div className="card-elegant w-full max-w-md bg-background p-7 md:p-10">
