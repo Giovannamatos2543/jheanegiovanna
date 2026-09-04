@@ -442,14 +442,13 @@ type GiftCategory = {
 
 const GIFT_CATEGORIES: GiftCategory[] = [
   { id: "todos", label: "Todos", icon: Sparkles },
-  { id: "cozinha", label: "Cozinha", icon: Utensils },
-  { id: "lua-de-mel", label: "Lua de mel", icon: Plane },
-  { id: "casa", label: "Casa nova", icon: HomeIcon },
-  { id: "eletro", label: "Eletrodomésticos", icon: Sparkles },
-  { id: "deco", label: "Decoração", icon: Sofa },
-  { id: "experiencias", label: "Experiências", icon: Camera },
-  { id: "cotas", label: "Cotas simbólicas", icon: Coins },
-  { id: "pix", label: "PIX & Dinheiro", icon: Wallet },
+  { id: "comida", label: "Comida & Delivery", icon: Utensils },
+  { id: "diversao", label: "Diversão", icon: Camera },
+  { id: "casal", label: "Vida de Casal", icon: Heart },
+  { id: "romance", label: "Romance", icon: Gem },
+  { id: "viagem", label: "Viagens", icon: Plane },
+  { id: "casa", label: "Nossa Casa", icon: HomeIcon },
+  { id: "fundo", label: "Fundos & Cotas", icon: Coins },
 ];
 
 
@@ -572,7 +571,11 @@ function Presentes() {
   );
 
   return (
-    <Section id="presentes" eyebrow="Com carinho" title="Lista de Presentes" className="surface-warm">
+    <Section id="presentes" eyebrow="Com carinho (e bom humor)" title="Quer nos dar um presentinho? 🎁😂" className="surface-warm">
+      <motion.p {...fadeUp} className="mx-auto -mt-6 mb-12 max-w-2xl text-center text-foreground/75 leading-relaxed">
+        Preparamos uma lista nada tradicional para ajudar a começar nossa vida de casados —
+        porque ganhar presente é bom, mas ganhar presente divertido é melhor ainda! 😂❤️
+      </motion.p>
       <PixArea />
 
       <motion.div {...fadeUp} className="flex flex-wrap justify-center gap-2 md:gap-3 mb-14">
@@ -651,6 +654,14 @@ function Presentes() {
           </motion.article>
         ))}
       </div>
+
+      <motion.div {...fadeUp} className="mx-auto mt-16 max-w-2xl text-center">
+        <Heart size={18} className="mx-auto text-fuchsia" />
+        <p className="mt-5 font-serif-display text-xl md:text-2xl leading-relaxed text-foreground/85">
+          Escolha seu presente, faça sua contribuição pelo Pix e pronto! Você acaba de participar
+          oficialmente da nossa vida de casados. 😂❤️
+        </p>
+      </motion.div>
 
       {chosen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-ink/60 px-5 py-10 backdrop-blur-sm">
