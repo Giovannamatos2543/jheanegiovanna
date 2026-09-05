@@ -18,6 +18,7 @@ import {
   Sofa,
   Camera,
   Coins,
+  Crown,
   Wallet,
   Gem,
   Clock,
