@@ -18,6 +18,7 @@ import {
   Sofa,
   Camera,
   Coins,
+  Crown,
   Wallet,
   Gem,
   Clock,
@@ -449,6 +450,7 @@ const GIFT_CATEGORIES: GiftCategory[] = [
   { id: "viagem", label: "Viagens", icon: Plane },
   { id: "casa", label: "Nossa Casa", icon: HomeIcon },
   { id: "fundo", label: "Fundos & Cotas", icon: Coins },
+  { id: "vip", label: "Presentes Nível VIP", icon: Crown },
 ];
 
 
