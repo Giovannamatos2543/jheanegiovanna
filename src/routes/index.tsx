@@ -421,9 +421,9 @@ function Recepcao() {
       <div className="max-w-2xl mx-auto">
         <EventCard
           icon={Wine}
-          eyebrow="Jantar & celebração"
+          eyebrow="🥂 Recepção / Festa"
           title="Saruê"
-          time="21h00"
+          time="20:00"
           place="Saruê Eventos"
           address={"R. Ver. Aurélio Garcês Novaes, 81 — Itagaçaba\nCruzeiro · SP · 12730-130"}
           mapsUrl="https://www.google.com/maps/search/?api=1&query=Saru%C3%AA+R.+Ver.+Aur%C3%A9lio+Gar%C3%A7%C3%AAs+Novaes+81+Cruzeiro+SP"
