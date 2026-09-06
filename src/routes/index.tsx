@@ -679,11 +679,21 @@ function Presentes() {
                 </p>
               )}
               <button
-                onClick={() => setChosen({ id: g.id, name: g.name })}
+                onClick={() => {
+                  setStep("pix");
+                  setChosen({
+                    id: g.id,
+                    name: g.name,
+                    description: g.description,
+                    value_label: g.value_label,
+                    image_url: g.image_url,
+                  });
+                }}
                 className="mt-3 w-full rounded-md border border-foreground/80 py-2.5 text-[9px] sm:text-[10px] uppercase tracking-[0.2em] hover:bg-foreground hover:text-background transition-colors"
               >
                 Presentear 🎁
               </button>
+
             </div>
           </motion.article>
         ))}
