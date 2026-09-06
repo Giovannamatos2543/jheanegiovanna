@@ -400,7 +400,7 @@ function Cerimonia() {
       <div className="max-w-2xl mx-auto">
         <EventCard
           icon={Church}
-          eyebrow="Celebração religiosa"
+          eyebrow="💒 Celebração religiosa"
           title="Igreja Santa Cecília"
           time="18:30"
           alert="Pedimos, por favor, que não se atrasem. A celebração terá início pontualmente às 18:30."
@@ -417,13 +417,13 @@ function Cerimonia() {
 
 function Recepcao() {
   return (
-    <Section id="recepcao" eyebrow="Logo após a cerimônia" title="A Recepção" className="surface-warm">
+    <Section id="recepcao" eyebrow="Logo após a cerimônia · 20:00" title="A Recepção" className="surface-warm">
       <div className="max-w-2xl mx-auto">
         <EventCard
           icon={Wine}
-          eyebrow="Jantar & celebração"
+          eyebrow="🥂 Recepção / Festa"
           title="Saruê"
-          time="21h00"
+          time="20:00"
           place="Saruê Eventos"
           address={"R. Ver. Aurélio Garcês Novaes, 81 — Itagaçaba\nCruzeiro · SP · 12730-130"}
           mapsUrl="https://www.google.com/maps/search/?api=1&query=Saru%C3%AA+R.+Ver.+Aur%C3%A9lio+Gar%C3%A7%C3%AAs+Novaes+81+Cruzeiro+SP"
@@ -607,15 +607,15 @@ function Presentes() {
         </p>
       )}
 
-      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+      <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-5 md:gap-6">
         {filtered.map((g, i) => (
           <motion.article
             key={g.id}
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-50px" }}
-            transition={{ duration: 0.7, delay: (i % 6) * 0.06, ease: [0.22, 1, 0.36, 1] }}
-            className="group bg-card border border-border overflow-hidden flex flex-col hover:border-fuchsia/40 transition-colors shadow-[0_20px_60px_-50px_rgba(0,0,0,0.35)]"
+            transition={{ duration: 0.6, delay: (i % 4) * 0.05, ease: [0.22, 1, 0.36, 1] }}
+            className="group bg-card border border-border rounded-xl overflow-hidden flex flex-col hover:border-fuchsia/40 transition-colors shadow-[0_20px_60px_-50px_rgba(0,0,0,0.35)]"
           >
             {g.image_url ? (
               <div className="relative aspect-[4/3] overflow-hidden bg-offwhite">
@@ -625,32 +625,41 @@ function Presentes() {
                   loading="lazy"
                   className="h-full w-full object-cover transition-transform duration-[1400ms] group-hover:scale-105"
                 />
-                <div className="absolute top-3 left-3 bg-background/90 backdrop-blur px-3 py-1 text-[9px] uppercase tracking-[0.25em] text-foreground/70">
+                <div className="absolute top-2 left-2 bg-background/90 backdrop-blur px-2 py-0.5 text-[8px] sm:text-[9px] uppercase tracking-[0.2em] text-foreground/70">
                   {GIFT_CATEGORIES.find((c) => c.id === g.category)?.label ?? g.category}
                 </div>
               </div>
             ) : (
               <div className="relative flex aspect-[4/3] items-center justify-center bg-offwhite">
-                <Gift size={26} className="text-gold" />
-                <div className="absolute top-3 left-3 bg-background/90 px-3 py-1 text-[9px] uppercase tracking-[0.25em] text-foreground/70">
+                <Gift size={22} className="text-gold" />
+                <div className="absolute top-2 left-2 bg-background/90 px-2 py-0.5 text-[8px] sm:text-[9px] uppercase tracking-[0.2em] text-foreground/70">
                   {GIFT_CATEGORIES.find((c) => c.id === g.category)?.label ?? g.category}
                 </div>
               </div>
             )}
-            <div className="p-7 text-center flex-1 flex flex-col">
-              <h3 className="font-serif-display text-xl">{g.name}</h3>
-              <div className="mx-auto my-4 h-px w-10 bg-gold/60" />
+            <div className="p-3 sm:p-4 md:p-5 text-center flex-1 flex flex-col">
+              <h3 className="font-serif-display text-[15px] sm:text-lg leading-tight line-clamp-2">
+                {g.name}
+              </h3>
+              <div className="mx-auto my-2 sm:my-3 h-px w-8 bg-gold/60" />
               {g.description && (
-                <p className="text-sm text-foreground/70 leading-relaxed flex-1">{g.description}</p>
+                <p
+                  title={g.description}
+                  className="text-[11px] sm:text-xs md:text-sm text-foreground/70 leading-snug flex-1 line-clamp-2 sm:line-clamp-3"
+                >
+                  {g.description}
+                </p>
               )}
               {g.value_label && (
-                <p className="mt-5 font-serif-display text-2xl text-foreground">{g.value_label}</p>
+                <p className="mt-2 sm:mt-3 font-serif-display text-lg sm:text-xl md:text-2xl text-foreground">
+                  {g.value_label}
+                </p>
               )}
               <button
                 onClick={() => setChosen({ id: g.id, name: g.name })}
-                className="mt-6 w-full border border-foreground/80 py-3 text-[10px] uppercase tracking-[0.3em] hover:bg-foreground hover:text-background transition-colors"
+                className="mt-3 w-full rounded-md border border-foreground/80 py-2.5 text-[9px] sm:text-[10px] uppercase tracking-[0.2em] hover:bg-foreground hover:text-background transition-colors"
               >
-                Presentear
+                Presentear 🎁
               </button>
             </div>
           </motion.article>
