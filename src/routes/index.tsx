@@ -537,11 +537,32 @@ function PixArea() {
   );
 }
 
+type ChosenGift = {
+  id: string;
+  name: string;
+  description?: string | null;
+  value_label?: string | null;
+  image_url?: string | null;
+};
+
 function Presentes() {
   const [active, setActive] = useState("todos");
-  const [chosen, setChosen] = useState<{ id: string; name: string } | null>(null);
+  const [chosen, setChosen] = useState<ChosenGift | null>(null);
+  const [step, setStep] = useState<"pix" | "registro">("pix");
   const [label, setLabel] = useState("");
   const [code, setCode] = useState("");
+
+  // Trava o scroll do fundo enquanto o modal está aberto, para o convidado
+  // voltar exatamente ao presente que estava vendo ao fechar.
+  useEffect(() => {
+    if (!chosen) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, [chosen]);
+
 
   const { data: gifts = [], isPending } = useQuery({
     queryKey: ["gifts"],
