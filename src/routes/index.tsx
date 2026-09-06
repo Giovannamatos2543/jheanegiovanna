@@ -537,11 +537,32 @@ function PixArea() {
   );
 }
 
+type ChosenGift = {
+  id: string;
+  name: string;
+  description?: string | null;
+  value_label?: string | null;
+  image_url?: string | null;
+};
+
 function Presentes() {
   const [active, setActive] = useState("todos");
-  const [chosen, setChosen] = useState<{ id: string; name: string } | null>(null);
+  const [chosen, setChosen] = useState<ChosenGift | null>(null);
+  const [step, setStep] = useState<"pix" | "registro">("pix");
   const [label, setLabel] = useState("");
   const [code, setCode] = useState("");
+
+  // Trava o scroll do fundo enquanto o modal está aberto, para o convidado
+  // voltar exatamente ao presente que estava vendo ao fechar.
+  useEffect(() => {
+    if (!chosen) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, [chosen]);
+
 
   const { data: gifts = [], isPending } = useQuery({
     queryKey: ["gifts"],
@@ -561,9 +582,11 @@ function Presentes() {
     onSuccess: () => {
       toast.success("Presente registrado! Obrigado de coração 💕");
       setChosen(null);
+      setStep("pix");
       setLabel("");
       setCode("");
     },
+
     onError: () => toast.error("Não foi possível registrar o presente agora."),
   });
 
@@ -656,11 +679,21 @@ function Presentes() {
                 </p>
               )}
               <button
-                onClick={() => setChosen({ id: g.id, name: g.name })}
+                onClick={() => {
+                  setStep("pix");
+                  setChosen({
+                    id: g.id,
+                    name: g.name,
+                    description: g.description,
+                    value_label: g.value_label,
+                    image_url: g.image_url,
+                  });
+                }}
                 className="mt-3 w-full rounded-md border border-foreground/80 py-2.5 text-[9px] sm:text-[10px] uppercase tracking-[0.2em] hover:bg-foreground hover:text-background transition-colors"
               >
                 Presentear 🎁
               </button>
+
             </div>
           </motion.article>
         ))}
@@ -675,50 +708,140 @@ function Presentes() {
       </motion.div>
 
       {chosen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-ink/60 px-5 py-10 backdrop-blur-sm">
-          <div className="card-elegant w-full max-w-md bg-background p-7 md:p-10">
-            <div className="flex items-start justify-between gap-4">
-              <h3 className="font-serif-display text-2xl">{chosen.name}</h3>
-              <button onClick={() => setChosen(null)} aria-label="Fechar">
-                <X size={18} className="text-foreground/60" />
+        <div
+          className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-ink/60 p-0 sm:p-6 backdrop-blur-sm"
+          onClick={() => setChosen(null)}
+        >
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+            onClick={(e) => e.stopPropagation()}
+            role="dialog"
+            aria-modal="true"
+            aria-label={chosen.name}
+            className="card-elegant w-full sm:max-w-md max-h-[92vh] overflow-y-auto rounded-t-3xl sm:rounded-2xl bg-background"
+          >
+            <div className="relative">
+              {chosen.image_url ? (
+                <img
+                  src={chosen.image_url}
+                  alt={chosen.name}
+                  className="h-40 sm:h-48 w-full object-cover rounded-t-3xl sm:rounded-t-2xl"
+                />
+              ) : (
+                <div className="flex h-32 sm:h-40 w-full items-center justify-center bg-offwhite rounded-t-3xl sm:rounded-t-2xl">
+                  <Gift size={30} className="text-gold" />
+                </div>
+              )}
+              <button
+                onClick={() => setChosen(null)}
+                aria-label="Fechar"
+                className="absolute right-3 top-3 grid h-9 w-9 place-items-center rounded-full bg-background/90 backdrop-blur"
+              >
+                <X size={16} className="text-foreground/70" />
               </button>
             </div>
-            <div className="my-5 h-px w-14 bg-gold/60" />
-            <p className="text-sm leading-relaxed text-foreground/75">
-              Faça o Pix usando a chave copiada e registre abaixo para sabermos de quem veio esse
-              carinho. O recebimento é confirmado manualmente pelos noivos.
-            </p>
-            <label className="mt-6 block text-[10px] uppercase tracking-[0.3em] text-foreground/60">
-              Seu nome
-            </label>
-            <input
-              value={label}
-              onChange={(e) => setLabel(e.target.value)}
-              maxLength={120}
-              className="mt-2 w-full border border-border bg-background px-4 py-3 text-sm outline-none focus:border-fuchsia"
-            />
-            <label className="mt-5 block text-[10px] uppercase tracking-[0.3em] text-foreground/60">
-              Código do convite (opcional)
-            </label>
-            <input
-              value={code}
-              onChange={(e) => setCode(e.target.value.toUpperCase())}
-              className="mt-2 w-full border border-border bg-background px-4 py-3 text-sm tracking-[0.15em] outline-none focus:border-fuchsia"
-            />
-            <button
-              onClick={() => register.mutate()}
-              disabled={register.isPending || (!label.trim() && code.trim().length < 4)}
-              className="mt-8 flex w-full items-center justify-center gap-2 border border-ink py-4 text-[11px] uppercase tracking-[0.35em] transition-colors hover:bg-ink hover:text-background disabled:opacity-40"
-            >
-              {register.isPending && <Loader2 size={14} className="animate-spin" />} Registrar
-              presente
-            </button>
-            <p className="mt-4 text-center text-[10px] uppercase tracking-[0.2em] text-foreground/50">
-              Status inicial: pagamento aguardando confirmação
-            </p>
-          </div>
+
+            <div className="p-5 sm:p-7 text-center">
+              <h3 className="font-serif-display text-xl sm:text-2xl leading-tight">{chosen.name}</h3>
+              {chosen.value_label && (
+                <p className="mt-2 font-serif-display text-2xl sm:text-3xl text-foreground">
+                  {chosen.value_label}
+                </p>
+              )}
+              <div className="mx-auto my-4 h-px w-14 bg-gold/60" />
+              {chosen.description && (
+                <p className="text-sm italic leading-relaxed text-foreground/70">
+                  {chosen.description}
+                </p>
+              )}
+              <p className="mt-3 text-sm text-foreground/80">
+                Que presente maravilhoso! 💕 Agora é só fazer o Pix.
+              </p>
+
+              {step === "pix" ? (
+                <>
+                  <div className="mt-6 rounded-xl border border-gold/40 bg-offwhite/60 px-4 py-5">
+                    <p className="text-[10px] uppercase tracking-[0.3em] text-foreground/55">
+                      Chave Pix (CPF)
+                    </p>
+                    <p className="mt-2 font-serif-display text-xl sm:text-2xl tracking-wide select-all break-all">
+                      {PIX_KEY}
+                    </p>
+                    <p className="mt-3 text-[11px] text-foreground/65">
+                      Titular: <span className="text-foreground/85">{PIX_OWNER}</span>
+                    </p>
+                  </div>
+
+                  <button
+                    onClick={async () => {
+                      try {
+                        await navigator.clipboard.writeText(PIX_KEY);
+                        toast.success("Chave Pix copiada! 💕");
+                      } catch {
+                        toast.error("Não foi possível copiar. Selecione a chave acima.");
+                      }
+                    }}
+                    className="mt-5 flex w-full items-center justify-center gap-2 rounded-xl bg-ink py-4 text-[11px] uppercase tracking-[0.3em] text-background transition-opacity hover:opacity-90"
+                  >
+                    <Copy size={14} /> 📋 Copiar chave Pix
+                  </button>
+
+                  <button
+                    onClick={() => setStep("registro")}
+                    className="mt-3 flex w-full items-center justify-center gap-2 rounded-xl border border-ink py-4 text-[11px] uppercase tracking-[0.3em] transition-colors hover:bg-ink hover:text-background"
+                  >
+                    ✅ Já fiz o Pix
+                  </button>
+                </>
+              ) : (
+                <>
+                  <p className="mt-6 text-sm leading-relaxed text-foreground/75">
+                    Só falta dizer quem enviou esse carinho — o recebimento é confirmado
+                    manualmente pelos noivos.
+                  </p>
+                  <label className="mt-5 block text-left text-[10px] uppercase tracking-[0.3em] text-foreground/60">
+                    Seu nome
+                  </label>
+                  <input
+                    value={label}
+                    onChange={(e) => setLabel(e.target.value)}
+                    maxLength={120}
+                    className="mt-2 w-full rounded-lg border border-border bg-background px-4 py-3 text-base outline-none focus:border-fuchsia"
+                  />
+                  <label className="mt-4 block text-left text-[10px] uppercase tracking-[0.3em] text-foreground/60">
+                    Código do convite (opcional)
+                  </label>
+                  <input
+                    value={code}
+                    onChange={(e) => setCode(e.target.value.toUpperCase())}
+                    className="mt-2 w-full rounded-lg border border-border bg-background px-4 py-3 text-base tracking-[0.15em] outline-none focus:border-fuchsia"
+                  />
+                  <button
+                    onClick={() => register.mutate()}
+                    disabled={register.isPending || (!label.trim() && code.trim().length < 4)}
+                    className="mt-6 flex w-full items-center justify-center gap-2 rounded-xl bg-ink py-4 text-[11px] uppercase tracking-[0.3em] text-background transition-opacity hover:opacity-90 disabled:opacity-40"
+                  >
+                    {register.isPending && <Loader2 size={14} className="animate-spin" />} Registrar
+                    presente
+                  </button>
+                  <button
+                    onClick={() => setStep("pix")}
+                    className="mt-3 w-full py-2 text-[10px] uppercase tracking-[0.25em] text-foreground/55 hover:text-foreground"
+                  >
+                    Voltar para a chave Pix
+                  </button>
+                </>
+              )}
+              <p className="mt-4 text-[10px] uppercase tracking-[0.2em] text-foreground/50">
+                Status inicial: pagamento aguardando confirmação
+              </p>
+            </div>
+          </motion.div>
         </div>
       )}
+
     </Section>
   );
 }
