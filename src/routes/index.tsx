@@ -400,7 +400,7 @@ function Cerimonia() {
       <div className="max-w-2xl mx-auto">
         <EventCard
           icon={Church}
-          eyebrow="Celebração religiosa"
+          eyebrow="💒 Celebração religiosa"
           title="Igreja Santa Cecília"
           time="18:30"
           alert="Pedimos, por favor, que não se atrasem. A celebração terá início pontualmente às 18:30."
@@ -417,7 +417,7 @@ function Cerimonia() {
 
 function Recepcao() {
   return (
-    <Section id="recepcao" eyebrow="Logo após a cerimônia" title="A Recepção" className="surface-warm">
+    <Section id="recepcao" eyebrow="Logo após a cerimônia · 20:00" title="A Recepção" className="surface-warm">
       <div className="max-w-2xl mx-auto">
         <EventCard
           icon={Wine}
