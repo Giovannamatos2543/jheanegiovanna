@@ -582,9 +582,11 @@ function Presentes() {
     onSuccess: () => {
       toast.success("Presente registrado! Obrigado de coração 💕");
       setChosen(null);
+      setStep("pix");
       setLabel("");
       setCode("");
     },
+
     onError: () => toast.error("Não foi possível registrar o presente agora."),
   });
 
