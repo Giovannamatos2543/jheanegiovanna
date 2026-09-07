@@ -120,14 +120,17 @@ export function InviteRsvp({
               <span className="text-[10px] uppercase tracking-[0.3em]">Acesso exclusivo</span>
             </div>
             <p className="mt-6 text-center text-sm leading-relaxed text-foreground/75">
-              Digite o código que você recebeu no seu convite. Cada família possui um código
+              Digite os 4 números que você recebeu no seu convite. Cada família possui um código
               exclusivo e visualiza apenas os seus próprios integrantes.
             </p>
             <input
               value={input}
-              onChange={(e) => setInput(e.target.value.toUpperCase())}
-              placeholder="CÓDIGO DO CONVITE"
-              className="font-serif-display mt-8 w-full border border-border bg-background px-5 py-4 text-center text-xl tracking-[0.2em] outline-none transition-colors focus:border-fuchsia"
+              onChange={(e) => setInput(e.target.value.replace(/\D/g, "").slice(0, 4))}
+              inputMode="numeric"
+              autoComplete="one-time-code"
+              maxLength={4}
+              placeholder="0000"
+              className="font-serif-display mt-8 w-full border border-border bg-background px-5 py-4 text-center text-xl tracking-[0.4em] outline-none transition-colors focus:border-fuchsia"
             />
             <button
               type="submit"
