@@ -36,7 +36,7 @@ export function InviteRsvp({
         setCode(null);
         return;
       }
-      setCode(c.trim().toUpperCase());
+      setCode(c.replace(/\D/g, "").slice(0, 4));
       setFamily(res.family);
       setGuests(res.guests as InviteGuest[]);
     },
