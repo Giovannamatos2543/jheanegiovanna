@@ -70,11 +70,15 @@ export function InviteRsvp({
 
   function submit(e: React.FormEvent) {
     e.preventDefault();
-    const c = input.trim().toUpperCase();
-    if (c.length < 4) return;
+    const c = input.replace(/\D/g, "").slice(0, 4);
+    if (c.length !== 4) {
+      toast.error("Digite os 4 números do seu convite.");
+      return;
+    }
     onCodeSubmit?.(c);
     load.mutate(c);
   }
+
 
   const confirmed = guests.filter((g) => g.rsvp_status === "confirmed").length;
   const declined = guests.filter((g) => g.rsvp_status === "declined").length;
