@@ -7,12 +7,12 @@ import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 // servidor, depois de validar o código privado do convite. Nenhuma família tem
 // acesso ao banco diretamente (RLS bloqueia anon e authenticated sem admin).
 
+// Código do convite: exatamente 4 dígitos numéricos.
 const codeSchema = z
   .string()
   .trim()
-  .min(4)
-  .max(40)
-  .transform((v) => v.toUpperCase());
+  .regex(/^\d{4}$/, "O código do convite deve ter 4 números.");
+
 
 export const getGifts = createServerFn({ method: "GET" }).handler(async () => {
   const { getPublicClient } = await import("./wedding.server");

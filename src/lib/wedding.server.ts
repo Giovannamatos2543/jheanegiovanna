@@ -41,16 +41,13 @@ export async function assertAdmin(context: AdminContext) {
   if (!data) throw new Error("Acesso restrito ao administrador.");
 }
 
-/** Alfabeto sem caracteres ambíguos (0/O, 1/I) para códigos de convite. */
-const CODE_ALPHABET = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
-
-export function generateInviteCode(length = 8) {
-  const bytes = new Uint8Array(length);
+/** Código de convite: exatamente 4 dígitos numéricos (0000-9999). */
+export function generateInviteCode(_length = 4) {
+  const bytes = new Uint32Array(1);
   crypto.getRandomValues(bytes);
-  let out = "";
-  for (const b of bytes) out += CODE_ALPHABET[b % CODE_ALPHABET.length];
-  return out;
+  return String(bytes[0]! % 10000).padStart(4, "0");
 }
+
 
 /**
  * Notificação por e-mail para o administrador.

@@ -576,7 +576,7 @@ function Presentes() {
           giftId: chosen!.id,
           method: "pix",
           ...(label.trim() ? { guestLabel: label.trim() } : {}),
-          ...(code.trim().length >= 4 ? { code: code.trim() } : {}),
+          ...(/^\d{4}$/.test(code.trim()) ? { code: code.trim() } : {}),
         },
       }),
     onSuccess: () => {
@@ -811,16 +811,19 @@ function Presentes() {
                     className="mt-2 w-full rounded-lg border border-border bg-background px-4 py-3 text-base outline-none focus:border-fuchsia"
                   />
                   <label className="mt-4 block text-left text-[10px] uppercase tracking-[0.3em] text-foreground/60">
-                    Código do convite (opcional)
+                    Código do convite (4 números, opcional)
                   </label>
                   <input
                     value={code}
-                    onChange={(e) => setCode(e.target.value.toUpperCase())}
+                    onChange={(e) => setCode(e.target.value.replace(/\D/g, "").slice(0, 4))}
+                    inputMode="numeric"
+                    maxLength={4}
+                    placeholder="0000"
                     className="mt-2 w-full rounded-lg border border-border bg-background px-4 py-3 text-base tracking-[0.15em] outline-none focus:border-fuchsia"
                   />
                   <button
                     onClick={() => register.mutate()}
-                    disabled={register.isPending || (!label.trim() && code.trim().length < 4)}
+                    disabled={register.isPending || (!label.trim() && code.trim().length !== 4)}
                     className="mt-6 flex w-full items-center justify-center gap-2 rounded-xl bg-ink py-4 text-[11px] uppercase tracking-[0.3em] text-background transition-opacity hover:opacity-90 disabled:opacity-40"
                   >
                     {register.isPending && <Loader2 size={14} className="animate-spin" />} Registrar
